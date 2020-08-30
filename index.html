@@ -11,12 +11,12 @@
     <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
     
     
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Regular.woff2" as="font">
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Bold.woff2" as="font">
+        <link rel="preload" crossorigin="crossorigin" href="/blog/fonts/roboto/Roboto-Regular.woff2" as="font">
+        <link rel="preload" crossorigin="crossorigin" href="/blog/fonts/roboto/Roboto-Bold.woff2" as="font">
     
     
     
-        <link rel="shortcut icon" href="https://i1.fuimg.com/724593/602a70a345fbdf00.jpg">
+        <link rel="shortcut icon" href="/blog/imgs/favicon.png">
     
     
     
@@ -37,64 +37,6 @@
 
 
 
-
-    
-        <script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        
-            load: ['[tex]/mhchem'],
-        
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        
-            packages: {'[+]': ['mhchem']},
-        
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-          
 
 
     
@@ -188,7 +130,7 @@
         <div class="sidebar-overview">
             <div class="sidebar-avatar">
                 
-                    <img src="https://i1.fuimg.com/724593/602a70a345fbdf00.jpg"/>
+                    <img src="/blog/imgs/avatar.jpg"/>
                 
             </div>
             <div class="sidebar-author-name">sien75</div>
@@ -243,6 +185,55 @@
       
       
         <div class="post-header"> 
+  <a class="post-header-title" href="/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/">HTTP基础</a>
+  <div class="post-header-meta">
+    <span>
+      <span class="iconfont icon-calendar"></span>
+      发布于:&nbsp;2020-08-24
+    </span>
+    <span>
+      <span class="iconfont icon-calendar-check"></span>
+      更新于:&nbsp;2020-08-30
+    </span>
+    <span>
+      <span class="iconfont icon-folder"></span>
+      分类于:&nbsp;<a class="category-link" href="/blog/categories/Web%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/">Web前端基础</a>
+    </span>
+    
+  </div>
+</div>   
+    
+
+
+
+      
+      
+  <div class="post-tags">
+    
+      <i class="iconfont icon-tag">
+        <a rel="tag" href = /blog/tags/HTTP/ >HTTP</a>
+      </i>
+    
+  </div>
+
+      
+      <div id="achieve-abstract" class="mdui-card-content mdui-p-x-4">
+        <div class="post-abstract mdui-typo ">
+          
+            <p>本文为阅读<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN文档中的HTTP部分</a>以及其他相关资料的笔记, 记录下了我认为关于HTTP的有价值的基础内容, 仅作为参考, 并不是教程类文章.</p>
+          
+        </div>
+        
+        <div style="text-align:center;">
+          <a class="post-readmore mdui-btn mdui-ripple mdui-btn-raised" href="/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/">阅读更多</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="mdui-card mdui-m-b-5 mdui-hoverable">    
+      
+      
+        <div class="post-header"> 
   <a class="post-header-title" href="/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/">HTML和CSS基础</a>
   <div class="post-header-meta">
     <span>
@@ -251,7 +242,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-08-23
+      更新于:&nbsp;2020-08-24
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -304,7 +295,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-08-23
+      更新于:&nbsp;2020-08-26
     </span>
     <span>
       <span class="iconfont icon-folder"></span>

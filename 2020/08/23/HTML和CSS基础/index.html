@@ -11,12 +11,12 @@
     <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
     
     
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Regular.woff2" as="font">
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Bold.woff2" as="font">
+        <link rel="preload" crossorigin="crossorigin" href="/blog/fonts/roboto/Roboto-Regular.woff2" as="font">
+        <link rel="preload" crossorigin="crossorigin" href="/blog/fonts/roboto/Roboto-Bold.woff2" as="font">
     
     
     
-        <link rel="shortcut icon" href="https://i1.fuimg.com/724593/602a70a345fbdf00.jpg">
+        <link rel="shortcut icon" href="/blog/imgs/favicon.png">
     
     
     
@@ -37,8 +37,6 @@
 
 
 
-
-          
 
 
     
@@ -132,7 +130,7 @@
         <div class="sidebar-overview">
             <div class="sidebar-avatar">
                 
-                    <img src="https://i1.fuimg.com/724593/602a70a345fbdf00.jpg"/>
+                    <img src="/blog/imgs/avatar.jpg"/>
                 
             </div>
             <div class="sidebar-author-name">sien75</div>
@@ -195,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-08-23
+      更新于:&nbsp;2020-08-24
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -221,7 +219,7 @@
       <button class="mdui-btn mdui-btn-icon mdui-text-color-teal" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="iconfont icon-share"></i></button>
       <ul class="mdui-menu" id="share_menu">
         <li class="mdui-menu-item">
-          <a href="http://service.weibo.com/share/share.php?appkey=&title=HTML和CSS基础&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/&pic=https://sien75.github.io/bloghttps://i1.fuimg.com/724593/602a70a345fbdf00.jpg&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
+          <a href="http://service.weibo.com/share/share.php?appkey=&title=HTML和CSS基础&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/&pic=https://sien75.github.io/blog/blog/blog/imgs/favicon.png&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
         </li>
         <li class="mdui-menu-item">
           <a href="https://twitter.com/intent/tweet?text=HTML和CSS基础&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/&via=sien75" target="_blank" class="mdui-ripple">分享到 Twitter</a>
@@ -236,7 +234,7 @@
           <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/&title=HTML和CSS基础" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
         </li>
         <li class="mdui-menu-item">
-          <a href="http://connect.qq.com/widget/shareqq/index.html?site=Sien75&#39;s Blog&title=HTML和CSS基础&summary=&pics=https://sien75.github.io/bloghttps://i1.fuimg.com/724593/602a70a345fbdf00.jpg&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/" target="_blank" class="mdui-ripple">分享到 QQ</a>
+          <a href="http://connect.qq.com/widget/shareqq/index.html?site=Sien75&#39;s Blog&title=HTML和CSS基础&summary=&pics=https://sien75.github.io/blog/blog/blog/imgs/favicon.png&url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/" target="_blank" class="mdui-ripple">分享到 QQ</a>
         </li>
         <li class="mdui-menu-item">
           <a href="https://telegram.me/share/url?url=https://sien75.github.io/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/&text=HTML和CSS基础" target="_blank" class="mdui-ripple">分享到 Telegram</a>
@@ -302,7 +300,10 @@
 </ul>
 </li>
 </ol>
-<h2 id="HTML5区块和段落元素"><a href="#HTML5区块和段落元素" class="headerlink" title="HTML5区块和段落元素"></a>HTML5区块和段落元素</h2><h2 id="关于CSS"><a href="#关于CSS" class="headerlink" title="关于CSS"></a>关于CSS</h2><p>我的CSS也就差不多是工地水平, 平时也是直接用第三方库的定位来写网页, 而且很多时候就用绝对定位, 所以我觉得有必要在CSS基础上花一点时间.</p>
+<h2 id="HTML5区块和段落元素"><a href="#HTML5区块和段落元素" class="headerlink" title="HTML5区块和段落元素"></a>HTML5区块和段落元素</h2><p>一个典型的HTML5网页<code>&lt;body&gt;</code>标签内的结构:</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span>&gt;</span>链接<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span>&gt;</span>目录<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span>&gt;</span>文章标题<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">address</span>&gt;</span>作者介绍<span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>部分标题<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>段落<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>段落<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">section</span>&gt;</span><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span>文章<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">aside</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">article</span>&gt;</span>小组件<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">article</span>&gt;</span>广告组件<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">aside</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>版权声明<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">address</span>&gt;</span>联系方式<span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="关于CSS"><a href="#关于CSS" class="headerlink" title="关于CSS"></a>关于CSS</h2><p>我的CSS也就差不多是工地水平, 平时也是直接用第三方库的定位来写网页, 而且很多时候就用绝对定位, 所以我觉得有必要在CSS基础上花一点时间.</p>
 <h2 id="CSS层叠与继承"><a href="#CSS层叠与继承" class="headerlink" title="CSS层叠与继承"></a>CSS层叠与继承</h2><ol>
 <li><p>CSS叫做层叠样式表(Cascading Style Sheets), 其中”<strong>层叠</strong>“的规则很重要:</p>
 <ul>
@@ -652,6 +653,11 @@
   
   <nav>
     
+      <a rel="prev" class="post-nav-item mdui-float-left" href="/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/">
+        <i class="iconfont icon-angle-left"></i>
+        <span>HTTP基础</span>
+      </a>
+    
     
       <a rel="next" class="post-nav-item mdui-float-right" href="/blog/2020/08/12/%E9%83%A8%E5%88%86ES6%E7%9F%A5%E8%AF%86/">
         <span>部分ES6知识</span>
@@ -720,12 +726,6 @@
 
 
 
-
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({
-        startOnLoad: true,
-        theme: "default"
-    });</script>
 
 
 

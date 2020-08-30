@@ -496,7 +496,8 @@
 <li><p>可以使用<code>import()</code>函数按需异步加载模块, <code>import()</code>返回的是一个Promise对象.</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> &#123;<span class="keyword">default</span>&#125; = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&#x27;./a.js&#x27;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">default</span>);</span><br><span class="line">&#125;())</span><br></pre></td></tr></table></figure></li>
 <li><p>浏览器加载模块, 除了可以使用<code>import</code>外, 也可以使用script标签异步加载(遇到后即下载脚本, 但不会等待执行, 会直接执行下面的同步代码).</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//下面两种是页面渲染完再执行</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//下面这种是脚本下载完就执行, 可能中断渲染</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//下面这种是页面渲染完再执行</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//下面这种是脚本下载完就执行, 可能中断渲染</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//默认情况下脚本的下载和执行都会中断渲染, 而且也会等待下载和执行的过程</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p> 以下图片来自<a href="https://juejin.im/post/6844903745730396174">https://juejin.im/post/6844903745730396174</a><br> <img src="./script_meanings.png" alt="图例"><br> defer:<br> <img src="./defer.png" alt="defer"><br> async:<br> <img src="./async.png" alt="async"><br> default:<br> <img src="./default.png" alt="default"></p>
 </li>
 <li><p>ES6的模块是动态引用, 也就是说如果模块中的某个变量值发生了变化, 所有引用该模块的地方, 这个变量值都会变化.</p>
 </li>
@@ -564,7 +565,10 @@
 </ul>
 </li>
 </ol>
-<h2 id="HTML5区块和段落元素"><a href="#HTML5区块和段落元素" class="headerlink" title="HTML5区块和段落元素"></a>HTML5区块和段落元素</h2><h2 id="关于CSS"><a href="#关于CSS" class="headerlink" title="关于CSS"></a>关于CSS</h2><p>我的CSS也就差不多是工地水平, 平时也是直接用第三方库的定位来写网页, 而且很多时候就用绝对定位, 所以我觉得有必要在CSS基础上花一点时间.</p>
+<h2 id="HTML5区块和段落元素"><a href="#HTML5区块和段落元素" class="headerlink" title="HTML5区块和段落元素"></a>HTML5区块和段落元素</h2><p>一个典型的HTML5网页<code>&lt;body&gt;</code>标签内的结构:</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span>&gt;</span>链接<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span>&gt;</span>目录<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span>&gt;</span>文章标题<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">address</span>&gt;</span>作者介绍<span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">section</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>部分标题<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>段落<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>段落<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">section</span>&gt;</span><span class="tag">&lt;/<span class="name">section</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span>文章<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">aside</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">article</span>&gt;</span>小组件<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">article</span>&gt;</span>广告组件<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">        ...</span><br><span class="line">    <span class="tag">&lt;/<span class="name">aside</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>版权声明<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">address</span>&gt;</span>联系方式<span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="关于CSS"><a href="#关于CSS" class="headerlink" title="关于CSS"></a>关于CSS</h2><p>我的CSS也就差不多是工地水平, 平时也是直接用第三方库的定位来写网页, 而且很多时候就用绝对定位, 所以我觉得有必要在CSS基础上花一点时间.</p>
 <h2 id="CSS层叠与继承"><a href="#CSS层叠与继承" class="headerlink" title="CSS层叠与继承"></a>CSS层叠与继承</h2><ol>
 <li><p>CSS叫做层叠样式表(Cascading Style Sheets), 其中”<strong>层叠</strong>“的规则很重要:</p>
 <ul>
@@ -909,6 +913,90 @@
       <tags>
         <tag>HTML</tag>
         <tag>CSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HTTP基础</title>
+    <url>/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>本文为阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN文档中的HTTP部分</a>以及其他相关资料的笔记, 记录下了我认为关于HTTP的有价值的基础内容, 仅作为参考, 并不是教程类文章.</p>
+<a id="more"></a>
+
+<h2 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h2><p>本文参考了<a href="https://www.cnblogs.com/chenqf/p/6386163.html">https://www.cnblogs.com/chenqf/p/6386163.html</a>, 这篇文章写的非常棒!</p>
+<ol>
+<li><p>缓存分为<strong>强制缓存</strong>和<strong>对比缓存</strong>.</p>
+<ul>
+<li>强制缓存如果生效, 那么就不需要向服务器发送请求, 直接使用缓存内容</li>
+<li>对比缓存机制下总是会向服务器发送请求, 服务器会进行验证, 并决定返回内容</li>
+<li>强制缓存优先级高于对比缓存, 强制缓存不生效时再使用对比缓存规则</li>
+</ul>
+</li>
+<li><p><code>强制缓存</code>是通过时间来验证缓存内容是否过期的. HTTP1.0时期的<code>Expires</code>字段, 已被HTTP1.1时期的<code>Cache-Control</code>替代. 在第一次请求服务器时, 服务器响应头会通过<code>Cache-Control</code>来告知客户端缓存策略. <code>Cache-Control</code>字段主要有以下取值:</p>
+<ul>
+<li>max-age=n, 表示采用强制缓存, 且有效时间为n秒</li>
+<li>no-cache, 使用对比缓存</li>
+<li>no-store, 不缓存</li>
+</ul>
+</li>
+<li><p><code>对比缓存</code>有以下两种方式来验证缓存内容是否过期:</p>
+<ul>
+<li><code>If-Modified-Since</code>, 客户端在请求头中带上上一次在服务器返回内容时<code>Last-Modified</code>的字段内容, 服务器验证在此时间之后内容是否有修改, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
+<li><code>If-None-Match</code>, 客户端在请求头中带上上一次服务器返回内容时<code>Etag</code>的字段内容, 这是由服务器生成的对资源的唯一标识, 服务器使用这一标识验证相应内容是否有新版本, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
+</ul>
+</li>
+<li><p>总的来说, 优先级上<code>强制缓存</code> &gt; <code>If-None-Match/Etag</code> &gt; <code>If-Modified-Since/Last-Modified</code>.</p>
+<ul>
+<li>如果存在强制缓存设置且生效, 则直接在缓存中获得内容, 不向服务器发送请求</li>
+<li>如果强制缓存未设置或失效, 则使用对比缓存, 上一次服务器返回的HTTP头中若有<code>Etag</code>字段则用<code>If-None-Match/Etag</code>, 否则若有<code>Last-Modified</code>则用<code>If-Modified-Since/Last-Modified</code></li>
+<li>如果未设置缓存机制, 则正常请求服务器内容</li>
+</ul>
+</li>
+</ol>
+<h2 id="HTTP-Cookie"><a href="#HTTP-Cookie" class="headerlink" title="HTTP Cookie"></a>HTTP Cookie</h2><p>Cookie主要用于会话管理, 个性化设置和浏览器行为跟踪, 由于Cookie有大小限制, 且浏览器每次请求都会带上Cookie数据造成额外开销, 所以Cookie已经不适合用作存储数据.</p>
+<p>服务端设置Cookie:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set-Cookie: id&#x3D;a3fWa; Expires&#x3D;Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly; Domain&#x3D;baidu.com; Path&#x3D;&#x2F;search; SameSite&#x3D;None</span><br></pre></td></tr></table></figure>
+<p>其中:</p>
+<ul>
+<li>未指定过期时间<code>Expires</code>则为会话Cookie, 窗口关闭自动删除; 设置了<code>Expires</code>是按照客户端的时间来计算的</li>
+<li><code>Secure</code>标识是指该Cookie仅能在HTTPS请求中发送给服务端</li>
+<li><code>HttpOnly</code>标识是指该Cookie无法通过<code>document.cookie</code>访问到, 可有效防止XSS攻击</li>
+<li><code>Domain</code>标识指定后所有子域名都可以使用这一Cookie, 默认情况下不同子域名间是不能互相访问Cookie的</li>
+<li><code>Path</code>标识设置后所有<code>/search</code>目录下的所有路径都会访问到Cookie值</li>
+<li><code>SameSite=Lax</code>为浏览器默认值, 意思是跨域请求不带上该Cookie, 可有效防止CSRF攻击, 设为<code>None</code>则取消该限制</li>
+</ul>
+<h2 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h2><p>CORS(Cross-Origin Resource Sharing)跨域资源共享, 是一种机制, 使用额外的HTTP头来告诉浏览器和服务器, 控制跨域的HTTP请求.</p>
+<ol>
+<li><p>场景1: 简单请求. 所谓简单请求, 是指使用<code>GET</code> <code>POST</code> <code>HEAD</code>, 且只包含被允许的HTTP头, <code>Content-Type</code>只能是指定值的请求. 浏览器在请求时会带上如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br></pre></td></tr></table></figure>
+<p> 服务器核实这个域是否被允许, 如允许, 则返回内容中带有如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *(或https:&#x2F;&#x2F;source.com)</span><br></pre></td></tr></table></figure>
+<p> 如果不允许, 返回内容中是不包含这个HTTP头的, 并在浏览器中触发错误.</p>
+</li>
+<li><p>场景2: 复杂请求. 不满足简单请求的都是复杂请求, 浏览器会预先使用OPTION方法发送一个预检请求, 询问服务器是否允许:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Request_method: PUT</span><br><span class="line">Access-Control-Headers: My-Header</span><br></pre></td></tr></table></figure>
+<p> 如果服务器允许, 就会带上以下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT</span><br><span class="line">Access-Control-Allow-Headers: My-Header</span><br><span class="line">Access-Control-Max-Age: 86400</span><br></pre></td></tr></table></figure>
+<p> 其中<code>Access-Control-Max-Age: 86400</code>意思是在24小时之内不必为同样的请求再次发送预检请求.</p>
+</li>
+<li><p>场景3: 附带Cookie的请求. 当然, 要想跨域附带Cookie, 首先需要设置好<code>目标网站https://destination.com</code>Cookie的<code>SameSite: None</code>, 允许跨域请求带Cookie. 对于XHR请求来说, 附带Cookie的操作如下:</p>
+ <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">&#x27;GET&#x27;</span>, url, <span class="literal">true</span>);</span><br><span class="line">xhr.withCredentials = <span class="literal">true</span>;</span><br><span class="line"><span class="comment">//other codes</span></span><br></pre></td></tr></table></figure>
+<p> 这样请求中就会带上Cookie, 如果服务器允许, 则返回的请求中就会多出如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: true</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="常见的HTTP响应代码"><a href="#常见的HTTP响应代码" class="headerlink" title="常见的HTTP响应代码"></a>常见的HTTP响应代码</h2><ul>
+<li><code>200 OK</code>, 请求成功</li>
+<li><code>301 Moved Permanently</code>, 请求的资源已被永久移至新位置</li>
+<li><code>304 Not Modified</code>, 请求的资源没有更改</li>
+<li><code>404 Not Found</code>, 请求的资源未发现</li>
+<li><code>501 Not Implemented</code>, 服务器不支持此请求方法</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web前端基础</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
       </tags>
   </entry>
 </search>
