@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-08-23
+      更新于:&nbsp;2020-09-04
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -317,6 +317,9 @@
 </li>
 <li><p>Function实例的方法apply，call，bind：扩充函数作用域。</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">a</span>: <span class="string">&#x27;chosen a&#x27;</span>, <span class="attr">b</span>: <span class="string">&#x27;chosen b&#x27;</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">show</span> (<span class="params">choice</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="built_in">this</span>.choice) &#125;</span><br><span class="line">show.apply(obj, [<span class="string">&#x27;a&#x27;</span>]);<span class="comment">//chosen a</span></span><br><span class="line">show.call(obj, <span class="string">&#x27;b&#x27;</span>);<span class="comment">//chosen b</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span> (<span class="params">msg</span>) </span>&#123; <span class="built_in">this</span>.log(msg) &#125;</span><br><span class="line">log = log.bind(<span class="built_in">console</span>);</span><br><span class="line">log(<span class="string">&#x27;hello bind&#x27;</span>);<span class="comment">//hello bind</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Number实例的一些方法:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">10</span>;</span><br><span class="line">num.toFixed(<span class="number">2</span>);<span class="comment">//10.00</span></span><br><span class="line">num.toExponential();<span class="comment">//1e+1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>String实例和String构造函数的一些方法：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;hello world!&#x27;</span>;</span><br><span class="line">str.charAt(<span class="number">1</span>);<span class="comment">//e</span></span><br><span class="line">str.charCodeAt(<span class="number">1</span>);<span class="comment">//101</span></span><br><span class="line">str.match(<span class="regexp">/.o/g</span>);<span class="comment">//[&#x27;lo&#x27;, &#x27;wo&#x27;]</span></span><br><span class="line">str.search(<span class="regexp">/.o/g</span>);<span class="comment">//3</span></span><br><span class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">104</span>, <span class="number">101</span>, <span class="number">108</span>, <span class="number">108</span>, <span class="number">111</span>);<span class="comment">//hello</span></span><br></pre></td></tr></table></figure>

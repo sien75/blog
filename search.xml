@@ -64,6 +64,9 @@
 <li><p>Function实例的方法apply，call，bind：扩充函数作用域。</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">a</span>: <span class="string">&#x27;chosen a&#x27;</span>, <span class="attr">b</span>: <span class="string">&#x27;chosen b&#x27;</span>&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">show</span> (<span class="params">choice</span>) </span>&#123; <span class="built_in">console</span>.log(<span class="built_in">this</span>.choice) &#125;</span><br><span class="line">show.apply(obj, [<span class="string">&#x27;a&#x27;</span>]);<span class="comment">//chosen a</span></span><br><span class="line">show.call(obj, <span class="string">&#x27;b&#x27;</span>);<span class="comment">//chosen b</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span> (<span class="params">msg</span>) </span>&#123; <span class="built_in">this</span>.log(msg) &#125;</span><br><span class="line">log = log.bind(<span class="built_in">console</span>);</span><br><span class="line">log(<span class="string">&#x27;hello bind&#x27;</span>);<span class="comment">//hello bind</span></span><br></pre></td></tr></table></figure>
 </li>
+<li><p>Number实例的一些方法:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> num = <span class="number">10</span>;</span><br><span class="line">num.toFixed(<span class="number">2</span>);<span class="comment">//10.00</span></span><br><span class="line">num.toExponential();<span class="comment">//1e+1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
 <li><p>String实例和String构造函数的一些方法：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">&#x27;hello world!&#x27;</span>;</span><br><span class="line">str.charAt(<span class="number">1</span>);<span class="comment">//e</span></span><br><span class="line">str.charCodeAt(<span class="number">1</span>);<span class="comment">//101</span></span><br><span class="line">str.match(<span class="regexp">/.o/g</span>);<span class="comment">//[&#x27;lo&#x27;, &#x27;wo&#x27;]</span></span><br><span class="line">str.search(<span class="regexp">/.o/g</span>);<span class="comment">//3</span></span><br><span class="line"><span class="built_in">String</span>.fromCharCode(<span class="number">104</span>, <span class="number">101</span>, <span class="number">108</span>, <span class="number">108</span>, <span class="number">111</span>);<span class="comment">//hello</span></span><br></pre></td></tr></table></figure>
 
@@ -496,7 +499,7 @@
 <li><p>可以使用<code>import()</code>函数按需异步加载模块, <code>import()</code>返回的是一个Promise对象.</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> &#123;<span class="keyword">default</span>&#125; = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">&#x27;./a.js&#x27;</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">default</span>);</span><br><span class="line">&#125;())</span><br></pre></td></tr></table></figure></li>
 <li><p>浏览器加载模块, 除了可以使用<code>import</code>外, 也可以使用script标签异步加载(遇到后即下载脚本, 但不会等待执行, 会直接执行下面的同步代码).</p>
- <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//下面这种是页面渲染完再执行</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//下面这种是脚本下载完就执行, 可能中断渲染</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//默认情况下脚本的下载和执行都会中断渲染, 而且也会等待下载和执行的过程</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight html"><table><tr><td class="code"><pre><span class="line">//下面这种是页面渲染完再执行</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">defer</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//下面这种是脚本下载完就执行, 可能中断HTML解析(DOM树的构建)</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span> <span class="attr">async</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//默认情况下脚本的下载和执行都会中断HTML解析, 而且也会等待下载和执行的过程</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span> <span class="attr">src</span>=<span class="string">&quot;./a.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p> 以下图片来自<a href="https://juejin.im/post/6844903745730396174">https://juejin.im/post/6844903745730396174</a><br> <img src="./script_meanings.png" alt="图例"><br> defer:<br> <img src="./defer.png" alt="defer"><br> async:<br> <img src="./async.png" alt="async"><br> default:<br> <img src="./default.png" alt="default"></p>
 </li>
 <li><p>ES6的模块是动态引用, 也就是说如果模块中的某个变量值发生了变化, 所有引用该模块的地方, 这个变量值都会变化.</p>
@@ -866,45 +869,7 @@
 </li>
 <li><p>继承, 用于语义化样式的重用.</p>
  <figure class="highlight scss"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.notice</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.special-notice</span> &#123;</span><br><span class="line">    <span class="keyword">@extend</span> .notice;</span><br><span class="line">    <span class="attribute">background-color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 </li>
-</ol>
-<h2 id="暂存-Web存储"><a href="#暂存-Web存储" class="headerlink" title="(暂存)Web存储"></a>(暂存)Web存储</h2><p>客户端有2个存储数据的对象.</p>
-<ul>
-<li>localStorage用于长久保存网站数据, 除非手动清除, 不会消失</li>
-<li>sessionStorage用于临时保存网站数据, 关闭窗口或标签页时数据就会被删除<br>两个对象使用方法都一样, 以localStorage为例:  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">localStorage</span>.data = <span class="number">1</span>;<span class="comment">//设置</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">localStorage</span>.data);<span class="comment">//读取(结果为字符串)</span></span><br><span class="line"><span class="keyword">delete</span> <span class="built_in">localStorage</span>.data;<span class="comment">//删除</span></span><br><span class="line"><span class="built_in">localStorage</span>.clear();<span class="comment">//全部清除</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="暂存-IndexDB"><a href="#暂存-IndexDB" class="headerlink" title="(暂存)IndexDB"></a>(暂存)IndexDB</h2><p><em>此部分参考了<a href="https://www.ruanyifeng.com/blog/2018/07/indexeddb.html">https://www.ruanyifeng.com/blog/2018/07/indexeddb.html</a></em><br>由于cookie大小不能超过4KB, 且每次请求都会发送给服务器; Web存储也有大小限制, 不提供搜索功能, 不能建立自定义的索引. 所以需要一种新的解决方案. IndexDB是一种NoSQL, 可以在客户端存储大量数据, 还支持二进制储存.</p>
-<ol>
-<li><p>基本概念:</p>
-<ul>
-<li>数据库(IDBDatabase对象), 数据总容器, 可以建立多个</li>
-<li>对象仓库(IDBObjectStore对象), 每个数据库中包含若干个对象仓库, 类似于SQL中的表</li>
-<li>索引(IDBIndex对象), 类似于SQL中的列名</li>
-<li>事务(IDBTransaction对象), 数据的增删改查都要通过它完成</li>
-<li>操作请求(IDBRequest对象), 打开或新建数据库时获取到的对象</li>
-<li>主键, 即默认的索引, 可以指定为某个属性, 也可以是自动生成的递增数据编号</li>
-</ul>
-</li>
-<li><p>打开, 新建和修改数据库<br> 通过以下方法打开, 新建或修改数据库:</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> request = indexDB.open(dbName, dbVerion);</span><br></pre></td></tr></table></figure>
-<p> 不指定dbVersion, 则使用当前版本. 返回的request是一个<code>IDBRequest对象</code>.</p>
-<ul>
-<li>如果操作成功则会触发success事件, 此即打开</li>
-<li>如果指定的版本高于当前版本, 且操作成功则会触发upgradeneeded事件, 此即修改</li>
-<li>如果指定的数据库名字不存在, 且操作成功则会触发upgradeneeded事件, 此即新建</li>
-<li>如果操作错误, 则会触发error事件<br>3个事件的使用如下:<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.target.result;<span class="comment">//这是个`IDBDatabase对象`</span></span><br><span class="line">&#125;;</span><br><span class="line">request.onupgradeneeded = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;<span class="comment">//如果要新建数据库的话, 按下面步骤操作</span></span><br><span class="line">    <span class="keyword">let</span> db = e.target.result;</span><br><span class="line">    <span class="keyword">let</span> objStore = db.createObjectStore(<span class="string">&#x27;newOS&#x27;</span>, &#123; <span class="attr">autoIncrement</span>: <span class="literal">true</span> &#125;);<span class="comment">//这个是`IDBObjectStore对象`</span></span><br><span class="line">    objStore.createIndex(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;name&#x27;</span>, &#123;<span class="attr">unique</span>: <span class="literal">false</span>&#125;);<span class="comment">//这个是`IDBIndex对象`</span></span><br><span class="line">&#125;;</span><br><span class="line">request.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.target.error;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>数据库内对象仓库的增删改查<br> 对对象仓库进行增删改查, 需要先获取该<code>IDBObjectStore对象</code>. 在新建对象仓库时可以通过<code>db.createObjectStore</code>返回值获得该对象, 但是如果对象仓库已经建立, 那就要通过事务对象<code>IDBTransaction对象</code>来获得了. 通过如下方法获得事务对象:</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> tsc = db.transaction([<span class="string">&#x27;objectStorageName&#x27;</span>], <span class="string">&#x27;readwrite&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p> 其中db上面的<code>IDBDatabase对象</code>, 之后就可以获取到相应的<code>IDBObjectStore对象</code>了:</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> objStore = tsc.objectStore(<span class="string">&#x27;objectStorageName&#x27;</span>);</span><br></pre></td></tr></table></figure>
-<p> 实际的query操作:</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> query = objStore.add(&#123;<span class="attr">name</span>: <span class="string">&#x27;name&#x27;</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;);<span class="comment">//增</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.delete(<span class="number">1</span>);<span class="comment">//删, 使用主键值作为参数</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.put(&#123;<span class="attr">name</span>: <span class="string">&#x27;name1&#x27;</span>, <span class="attr">age</span>: <span class="number">19</span>&#125;, <span class="number">1</span>);<span class="comment">//改, 第二个参数是主键值</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.get(<span class="number">1</span>);<span class="comment">//查, 使用主键值作为参数</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 ]]></content>
       <categories>
@@ -921,7 +886,7 @@
     <content><![CDATA[<p>本文为阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN文档中的HTTP部分</a>以及其他相关资料的笔记, 记录下了我认为关于HTTP的有价值的基础内容, 仅作为参考, 并不是教程类文章.</p>
 <a id="more"></a>
 
-<h2 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h2><p>本文参考了<a href="https://www.cnblogs.com/chenqf/p/6386163.html">https://www.cnblogs.com/chenqf/p/6386163.html</a>, 这篇文章写的非常棒!</p>
+<h2 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h2><p><em>本文参考了<a href="https://www.cnblogs.com/chenqf/p/6386163.html">https://www.cnblogs.com/chenqf/p/6386163.html</a>, 这篇文章写的非常棒!</em></p>
 <ol>
 <li><p>缓存分为<strong>强制缓存</strong>和<strong>对比缓存</strong>.</p>
 <ul>
@@ -997,6 +962,148 @@
       </categories>
       <tags>
         <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浏览器基础</title>
+    <url>/blog/2020/08/31/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>本文包含了部分浏览器的基础内容, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考.</p>
+<a id="more"></a>
+
+<h2 id="浏览器的工作原理概述"><a href="#浏览器的工作原理概述" class="headerlink" title="浏览器的工作原理概述"></a>浏览器的工作原理概述</h2><ol>
+<li><p>浏览器的构成.</p>
+<p> <img src="./components.png" alt="浏览器的构成"></p>
+<p> 浏览器主要由以下几个部分构成:</p>
+<ul>
+<li>用户界面, 包括地址栏, 前进/后退按钮, 书签菜单等, 即浏览器的”前端”</li>
+<li>浏览器引擎, 在用户界面和渲染引擎之间传送指令(说实话我不清楚这一部分的真正角色, 可能各套壳浏览器会修改这一部分吧)</li>
+<li><strong>渲染引擎</strong>, 解析HTML和CSS, 并计算页面布局, 确定元素位置</li>
+<li>JS解释器, 解释和执行JavaScript代码</li>
+<li>网络, 用于网络调用, 比如HTTP请求, 公开了与平台无关的通用接口, 而在底层使用操作系统的网络方法(最终是使用<strong>网卡</strong>)</li>
+<li>用户界面后端, 用于绘制基本的窗口小部件, 公开了与平台无关的通用接口, 而在底层使用操作系统的用户界面方法(最终是使用<strong>显卡</strong>)</li>
+<li>数据存储, 用于浏览器在硬盘保存数据, 也叫数据持久层(最终是使用<strong>硬盘</strong>)</li>
+</ul>
+<p> <em>此部分参考了<a href="https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/">https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/</a>.</em></p>
+</li>
+<li><p>浏览器的工作流程. 下面的图片是在<a href="https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/webkitflow.png">原图片</a>的基础上, 加上我自己的理解, 绘制的浏览器工作流程图, 使用的是WebKit渲染引擎.</p>
+<p> <img src="./webkit_flow.png" alt="WebKit渲染引擎浏览器工作流程图"></p>
+<p> 在上图中, 我们可以清晰地看到浏览器的工作流程.</p>
+<ul>
+<li>浏览器的工作当然是先从<code>用户界面(User Interface)</code>开始的. 用户的一些操作, 比如点击链接, 输入url跳往指定地址等会触发指令, 通过<code>浏览器引擎(Browser Engine)</code>传往<code>渲染引擎(Render Engine)</code></li>
+<li><code>浏览器引擎(Browser Engine)</code>还会从<code>数据持久层(Data Persistence)</code>中取出储存的数据, 如Cookie, 缓存等, 一并送往<code>渲染引擎(Render Engine)</code></li>
+<li>在<code>渲染引擎(Render Engine)</code>中, 由<code>loader</code>负责接收指令, 并且根据指令调用<code>网络(Networking)</code>, 获得相应的文件</li>
+<li>获得的文件中, HTML部分交由<code>HTML Parser</code>处理, 形成<code>DOM树(DOM Tree)</code>; 样式表部分交由<code>CSS Parser</code>处理, 形成CSS规则; JavaScript部分交由<code>JavaScript解释器(JavaScript Interpreter)</code>处理. 最终CSS, JavaScript的解析结果以及其他静态资源如图片会附加到DOM树上</li>
+<li>用户的一些动态操作结果也会被动态地附加到DOM树上, 进而也会动态触发后面的流程</li>
+<li>之后渲染引擎的<code>布局(Layout)</code>工作, 把包含样式的<code>渲染树(Render Tree)</code>转换成包含坐标信息的渲染树. 在首次布局之后, 再次发生的布局被称为<code>重排(Relayout)</code></li>
+<li>之后渲染引擎的<code>绘制(Paint)</code>工作, 调用<code>用户界面后端(UI Backend)</code>将每个节点绘制出来. 在首次绘制之后, 再次发生的绘制被称为<code>重绘(Repaint)</code></li>
+</ul>
+<p> <em>此部分参考了<a href="https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/">https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/</a>.</em></p>
+</li>
+<li><p>大多数情况下, 我们使用Gecko的术语<code>回流(Reflow)</code>表示重排的过程.</p>
+<ul>
+<li>渲染树中元素的尺寸, 结构或某些属性发生改变时, 会发生回流. 从上面的流程图可以看到, 回流必然引发重绘</li>
+<li>当一些不影响元素在布局流中的位置的属性改变时, 如<code>color</code> <code>visibility</code>, 仅会发生重绘</li>
+</ul>
+<p>由于频繁的回流和重绘会影响性能, 所以在写代码的时候尽量遵循一定的原则避免频繁的回流和重绘:</p>
+<ul>
+<li>不使用table布局</li>
+<li>避免设置多层样式</li>
+<li>避免使用CSS表达式(如<code>calc()</code>)</li>
+<li>将动画效果应用到<code>position</code>属性为<code>absolute</code>或<code>fixed</code>的元素上, 否则会引起父元素的频繁回流</li>
+<li>避免频繁使用JavaScript操作样式, 应多次一并修改</li>
+<li>避免频繁操作DOM, 可创建<code>documentFragment</code>, 在其上面进行DOM操作, 最后附加到DOM树上</li>
+</ul>
+</li>
+<li><p>HTML的解析过程, 是可能会被阻塞的. 我们知道HTML文件是自上而下解析的, 当遇到内联CSS和内联JavaScript以及外联的普通JavaScript时, 会暂停HTML解析, 进行相应的CSS和JavaScript下载和解析, 在所有HTML, CSS和JavaScript解析完毕后触发<code>DOMContentLoaded</code>事件. 当然, 还有一些文件如图片等也需要下载, 在这些所有的文件都下载并且加载完后会才触发<code>load</code>事件.</p>
+<p>外联的CSS本不会阻塞HTML解析, 但是JavaScript可能会操作样式, 所以浏览器在遇到<code>&lt;script&gt;</code>标签之前的外联CSS时会暂停HTML解析过程, 也就是说<code>&lt;script&gt;</code>标签之前的外联CSS会阻塞HTML解析, 之后的外联CSS就不会阻塞HTML解析了, 当然也不会阻塞<code>DOMContentLoaded</code>事件的触发.</p>
+<p>异步加载JavaScript的两个方式(可以见我的<a href="https://sien75.github.io/blog/2020/08/12/%E9%83%A8%E5%88%86ES6%E7%9F%A5%E8%AF%86/#Module">部分ES6知识-Module部分</a>)中, defer类会在整个同步代码解析完毕之后再解析, 会阻塞<code>DOMContentLoaded</code>事件的触发. 而async类的解析过程会阻塞同步代码解析, 进而阻塞<code>DOMContentLoaded</code>事件的触发, 但是如果在同步代码解析后async类内代码才下载完, 那其就不会阻塞<code>DOMContentLoaded</code>事件的触发了.</p>
+<p><em>此部分参考了<a href="https://juejin.im/post/6844903745730396174">https://juejin.im/post/6844903745730396174</a></em></p>
+</li>
+<li><p>下图为浏览器接口示意图(根据我自己的理解画的), 所谓Web API, 就是指使用JavaScript去读(获得)或写(控制)其它单位的方法. 这里的其他单位可能是渲染引擎, 也可能是其他JS线程, 也可能是硬件, 当然最终都是控制的硬件.</p>
+<p>每一种访问都有其专门的接口, 在JavaScript里面体现为一种特定的对象类型. 比如你</p>
+<ul>
+<li>想访问渲染引擎里的DOM, 那就用到了<code>Document</code>类型; 想访问Web Worker线程, 那就用到了<code>Worker</code>类型</li>
+<li>想在内存里新建一定大小的数据, 那就用到了<code>ArrayBuffer</code>类型</li>
+<li>想访问硬盘上的二进制文件, 那就用到了<code>Blob</code>类型</li>
+<li>想通过网卡异步访问互联网的内容, 那就用到了<code>XMLHttpRequest</code>类型</li>
+</ul>
+<p><img src="./interface.png" alt="浏览器接口示意图"></p>
+<p>DOM接口和BOM接口是使用EcmaScript进行Web开发的基本Web API, 我们把这两部分和EcmaScript合称JavaScript. 但是由于浏览器的日益复杂, 浏览器本身组成部分和支持的硬件越来越多, 所以仅仅使用DOM和BOM无法满足需求. 在这里我倾向于取JavaScript的狭义, 即JavaScript = EcmaScript.</p>
+<p>使用JavaScript(EcmaScript)来操作浏览器以及各种硬件, 需要包括DOM接口和BOM接口在内的各种Web API的扶持, 也就是说, Web API实际上赋予了开发者使用JavaScript(EcmaScript)开发各种功能的Web应用的能力, 是构建于JavaScript(EcmaScript)语言之上的.</p>
+</li>
+</ol>
+<h2 id="客户端存储-–-Storage"><a href="#客户端存储-–-Storage" class="headerlink" title="客户端存储 – *Storage"></a>客户端存储 – *Storage</h2><p>客户端有2个存储数据的对象.</p>
+<ul>
+<li>localStorage用于长久保存网站数据, 除非手动清除, 不会消失</li>
+<li>sessionStorage用于临时保存网站数据, 关闭窗口或标签页时数据就会被删除<br>两个对象使用方法都一样, 以localStorage为例:  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">localStorage</span>.data = <span class="number">1</span>;<span class="comment">//设置</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">localStorage</span>.data);<span class="comment">//读取(结果为字符串)</span></span><br><span class="line"><span class="keyword">delete</span> <span class="built_in">localStorage</span>.data;<span class="comment">//删除</span></span><br><span class="line"><span class="built_in">localStorage</span>.clear();<span class="comment">//全部清除</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="客户端存储-–-IndexedDB"><a href="#客户端存储-–-IndexedDB" class="headerlink" title="客户端存储 – IndexedDB"></a>客户端存储 – IndexedDB</h2><p><em>此部分参考了<a href="https://www.ruanyifeng.com/blog/2018/07/indexeddb.html">https://www.ruanyifeng.com/blog/2018/07/indexeddb.html</a></em><br>由于cookie大小不能超过4KB, 且每次请求都会发送给服务器; *Storage也有大小限制, 不提供搜索功能, 不能建立自定义的索引. 所以需要一种新的解决方案. IndexedDB是一种NoSQL, 可以在客户端存储大量数据, 还支持二进制储存.</p>
+<ol>
+<li><p>基本概念:</p>
+<ul>
+<li>数据库(IDBDatabase对象), 数据总容器, 可以建立多个</li>
+<li>对象仓库(IDBObjectStore对象), 每个数据库中包含若干个对象仓库, 类似于SQL中的表</li>
+<li>索引(IDBIndex对象), 类似于SQL中的列名</li>
+<li>事务(IDBTransaction对象), 数据的增删改查都要通过它完成</li>
+<li>操作请求(IDBRequest对象), 打开或新建数据库时获取到的对象</li>
+<li>主键, 即默认的索引, 可以指定为某个属性, 也可以是自动生成的递增数据编号</li>
+</ul>
+</li>
+<li><p>打开, 新建和修改数据库<br> 通过以下方法打开, 新建或修改数据库:</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> request = indexedDB.open(dbName, dbVerion);</span><br></pre></td></tr></table></figure>
+<p> 不指定dbVersion, 则使用当前版本. 返回的request是一个<code>IDBRequest对象</code>.</p>
+<ul>
+<li>如果操作成功则会触发success事件, 此即打开</li>
+<li>如果指定的版本高于当前版本, 且操作成功则会触发upgradeneeded事件, 此即修改</li>
+<li>如果指定的数据库名字不存在, 且操作成功则会触发upgradeneeded事件, 此即新建</li>
+<li>如果操作错误, 则会触发error事件<br>3个事件的使用如下:<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">request.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> db = e.target.result;<span class="comment">//这是个`IDBDatabase对象`</span></span><br><span class="line">    db.objectStoreNames;<span class="comment">//获得该数据库下所有的</span></span><br><span class="line">&#125;;</span><br><span class="line">request.onupgradeneeded = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;<span class="comment">//如果要新建数据库的话, 按下面步骤操作</span></span><br><span class="line">    <span class="keyword">let</span> db = e.target.result;</span><br><span class="line">    <span class="keyword">let</span> objStore = db.createObjectStore(<span class="string">&#x27;newOS&#x27;</span>, &#123; <span class="attr">autoIncrement</span>: <span class="literal">true</span> &#125;);<span class="comment">//这个是`IDBObjectStore对象`</span></span><br><span class="line">    objStore.createIndex(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;name&#x27;</span>, &#123;<span class="attr">unique</span>: <span class="literal">false</span>&#125;);<span class="comment">//这个是`IDBIndex对象`</span></span><br><span class="line">&#125;;</span><br><span class="line">request.onerror = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.target.error;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>数据库内对象仓库的增删改查<br> 对对象仓库进行增删改查, 需要先获取该<code>IDBObjectStore对象</code>. 在新建对象仓库时可以通过<code>db.createObjectStore</code>返回值获得该对象, 但是不能这样直接使用, 而是要通过事务对象<code>IDBTransaction对象</code>来获得<code>IDBObjectStore对象</code>. 通过如下方法获得事务对象:</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> tsc = db.transaction([<span class="string">&#x27;objectStorageName&#x27;</span>], <span class="string">&#x27;readwrite&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p> 其中db是上面的<code>IDBDatabase对象</code>, 之后就可以获取到相应的<code>IDBObjectStore对象</code>了:</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> objStore = tsc.objectStore(<span class="string">&#x27;objectStorageName&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p> 实际的query操作:</p>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> query = objStore.add(&#123;<span class="attr">name</span>: <span class="string">&#x27;sam&#x27;</span>, <span class="attr">age</span>: <span class="number">18</span>&#125;);<span class="comment">//增</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.delete(<span class="number">1</span>);<span class="comment">//删, 使用主键值作为参数</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.put(&#123;<span class="attr">name</span>: <span class="string">&#x27;amy&#x27;</span>, <span class="attr">age</span>: <span class="number">19</span>&#125;, <span class="number">1</span>);<span class="comment">//改, 第二个参数是主键值</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.get(<span class="number">1</span>);<span class="comment">//查, 使用主键值作为参数</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.index(<span class="string">&#x27;name&#x27;</span>).get(<span class="string">&#x27;sam&#x27;</span>);<span class="comment">//查, 使用索引作为参数</span></span><br><span class="line"><span class="keyword">let</span> query = objStore.openCursor();<span class="comment">//遍历, 监听query的success事件</span></span><br><span class="line"><span class="comment">//以上query都有success和error事件, 都是`IDBRequest对象`, 在监听函数内部通过e.target.result或this.result或query.result访问到结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用监听函树实例(遍历):</span></span><br><span class="line">query.onsuccess = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> cursor = e.target.reuslt;</span><br><span class="line">    <span class="keyword">if</span>(cursor) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(cursor.value, cursor.key);</span><br><span class="line">        cursor.continue();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>关于浏览器的进程和线程. <code>进程(process)</code>是操作系统分配资源的最小单位, <code>线程(thread)</code>是程序执行的最小单位; 进程由线程组成, 进程间相互独立, 同一进程的线程之间共享资源; 线程切换比进程快.</p>
+<p>Chrome浏览器使用的是多进程隔离不同的标签页, 在每一个进程中, 有着渲染引擎线程, JavaScript解释器线程, 定时器线程, 事件线程以及网络线程等. 除了各标签页进程外, Chrome还有主进程, 扩展程序进程等. </p>
+<p>由于JavaScript解释器线程(一般称为主线程)和渲染引擎线程互斥, 所以如果JavaScript解释器线程上有一些耗时的代码, 那么必然会阻塞其他代码的执行, 也会阻塞页面的渲染. 所以, 如果我们需要运行一些耗时的代码时, 完全可以开辟一个新的线程, 这就是<code>Web Worker</code>. <code>Web Worker</code>实际上是存在于标签页进程内部的线程.</p>
+<p>然而<code>Web Worker</code>是跟随标签页进程的, 当标签页关闭了, 其工作也就结束了. 如果想持久化, 那就需要<code>Service Worker</code>.</p>
+<p><code>Service Worker</code>本身也是一个新的线程, 但是它是独立于标签页线程的, 标签页的关闭不会导致其结束. 而且, <code>Service Worker</code>还被赋予中间人代理的权利, 即抓取网络请求并作出修改, 再送给渲染引擎的权利. 借着这两点, 它可以做到对网络请求文件的缓存, 使页面可以离线访问. 它还有消息推送的能力, 使得Web网页变得更像一个本地应用.</p>
+<h2 id="Web-Worker"><a href="#Web-Worker" class="headerlink" title="Web Worker"></a>Web Worker</h2><p><em>此部分参考了<a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html">http://www.ruanyifeng.com/blog/2018/07/web-worker.html</a></em></p>
+<ol>
+<li><p>基本用法.</p>
+<p>主线程(JavaScript解释器线程):</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> worker = <span class="keyword">new</span> Worker(<span class="string">&#x27;work.js&#x27;</span>);</span><br><span class="line">worker.postMessage(&#123;<span class="attr">content</span>: <span class="string">&#x27;Hello&#x27;</span>&#125;);</span><br><span class="line">worker.onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;main thread recieved message!&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line">worker.onerror = <span class="built_in">console</span>.error;</span><br></pre></td></tr></table></figure>
+<p>Worker线程全局环境绑定了监听函数和消息发送函数, work.js的内容如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">onmessage = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(e);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;web worker recieved message!&#x27;</span>);</span><br><span class="line">    postMessage(&#123;<span class="attr">content</span>: <span class="string">&#x27;Hello too&#x27;</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关闭Worker线程:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">worker.terminate();<span class="comment">//主线程内</span></span><br><span class="line">close();<span class="comment">//Worker线程内</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>数据通信.</p>
+<p>主线程和Worker线程之间的通信是拷贝的关系, 即先把通信内容串行化(转换成字符串), 接收方再将其还原. 主线程和Worker线程之间也可以交换二进制数据, 但是如果二进制数据太大, 这样的拷贝既浪费时间, 又浪费存储资源. 在此, 可以通过直接将二进制数据转移给Worker线程.</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> ab1 = <span class="keyword">new</span> <span class="built_in">ArrayBuffer</span>(<span class="number">16</span>);</span><br><span class="line"><span class="keyword">let</span> ab2 = <span class="keyword">new</span> <span class="built_in">ArrayBuffer</span>(<span class="number">16</span>);</span><br><span class="line">worker.postMessage(</span><br><span class="line">    &#123;ab1, ab2&#125;,</span><br><span class="line">    [ab1, ab2]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>其中第一个参数就是指传递的变量, 第二个参数是一个数组, 包含了需要转移的二进制数据变量名.</p>
+</li>
+<li><p>同文件的Web Worker.   </p>
+<p>使用Web Worker可以不用单独的文件, 借助Blob类型的URL构造能力, 可以在单个文件内创建Web Worker.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let work &#x3D; function () &#123;</span><br><span class="line">    &#x2F;&#x2F;web worker codes</span><br><span class="line">&#125;</span><br><span class="line">let blob &#x3D; new Blob(&#96;($&#123;work.toString()&#125;)()&#96;);</span><br><span class="line">let url &#x3D; URL.createObjectURL(blob);</span><br><span class="line">let worker &#x3D; new Worker(url);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;或者</span><br><span class="line">let work &#x3D; &#96;</span><br><span class="line">    &#x2F;&#x2F;web worker codes</span><br><span class="line">&#96;;</span><br><span class="line">let blob &#x3D; new Blob(work);</span><br><span class="line">let url &#x3D; URL.createObjectURL(blob);</span><br><span class="line">let worker &#x3D; new Worker(url);   </span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Service-Worker"><a href="#Service-Worker" class="headerlink" title="Service Worker"></a>Service Worker</h2><p>建议参考<a href="https://lavas-project.github.io/pwa-book/chapter04.html">https://lavas-project.github.io/pwa-book/chapter04.html</a>, 文章把Service Worker作为PWA技术的一部分, 讲解得非常详实. 由于Service Worker并不是一种基础知识, 在此我就不总结了.</p>
+]]></content>
+      <categories>
+        <category>Web前端基础</category>
+      </categories>
+      <tags>
+        <tag>浏览器</tag>
       </tags>
   </entry>
 </search>
