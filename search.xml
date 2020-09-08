@@ -347,7 +347,7 @@
 </li>
 <li><p>和<code>let</code>一样, <code>const</code>不允许重复声明, 也存在暂时性死区. </p>
 </li>
-<li><p>由于浏览器的顶层对象是<code>window</code>/<code>self</code>, Node的顶层对象是<code>global</code>；在全局环境中<code>this</code>返回顶层对象, 但是Node模块和ES6模块中<code>this</code>指当前模块；非对象函数的<code>this</code>指向顶层对象, 但是严格模式下指向<code>udefined</code>. 所以顶层对象获取比较复杂. ES2020规定了<code>globalThis</code>作为顶层对象, 使顶层对象的获取更加方便. </p>
+<li><p>由于浏览器的顶层对象是<code>window</code>/<code>self</code>, Node.js的顶层对象是<code>global</code>；在全局环境中<code>this</code>返回顶层对象, 但是Node.js模块和ES6模块中<code>this</code>指当前模块；非对象函数的<code>this</code>指向顶层对象, 但是严格模式下指向<code>udefined</code>. 所以顶层对象获取比较复杂. ES2020规定了<code>globalThis</code>作为顶层对象, 使顶层对象的获取更加方便. </p>
 </li>
 </ol>
 <h2 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h2><ol>
@@ -390,15 +390,12 @@
 </li>
 </ol>
 <h2 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h2><ol>
-<li><p>Promise是异步编程的一种解决方案, 一个Promise对象代表一个异步操作, 它有3种状态：<code>pending(进行中)</code> <code>fufilled(已成功)</code> <code>rejected(已失败)</code>, 后面两种统称为<code>resolved(已定型)</code>, 但是一般我们用<code>resolved(已定型)</code>代表<code>fufilled(已成功)</code>. </p>
+<li><p>Promise是异步编程的一种解决方案, 一个Promise对象代表一个异步操作, 它有3种状态：<code>pending(进行中)</code> <code>fufilled(已成功)</code> <code>rejected(已失败)</code>, 后面两种统称为<code>resolved(已定型)</code>, 但是一般我们用<code>resolved(已定型)</code>代表<code>fufilled(已成功)</code>.</p>
+<p> 在详述Promise之前, 需要明确<code>事件循环(Event Loop)</code>. <code>事件循环(Event Loop)</code>在浏览器和Node.js中的实现是有一些不同的, 参考<a href="https://sien75.github.io/blog/2020/08/31/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80/#%E5%A4%9A%E7%BA%BF%E7%A8%8B">这里</a>来了解浏览器的实现, 参考<a href="">这里</a>来了解Node.js的实现.</p>
 </li>
-<li><p>在详述Promise之前, 先简单解释一下<code>event loop(事件循环)</code>. JavaScript是设计用来操作DOM的语言, 为了避免复杂性, JavaScript是一种<strong>单线程</strong>语言. 但是在Web中, 有大量的异步操作, 比如ajax、用户点击等. 为了解决这个问题, 实现思路为, 单一主线程, 多子线程.<br>JS引擎自上而下解释代码, 根据作用域链对执行栈进行压栈弹栈, 遇到异步操作就交给子线程处理, ——这是主线程. 代码解释完毕, JS引擎开始监听任务队列. 子线程的异步操作只要执行完毕, 就会往任务队列里面添加事件. JS引擎会不断检测任务队列, 只要其中有事件, 就出队1个事件, 将其回调函数压入执行栈执行, 执行完毕后再次在任务队列里取事件, 循环往复. 这就是<code>event loop(事件循环)</code>机制.<br>任务分为两种, <code>micro task(微任务)</code>和<code>macro task(宏任务)</code>, 前者包含<code>Promise</code> <code>process.nextTick</code>等, 后者包含<code>setTimeout</code> <code>setInterval</code>等, JS引擎会先读取微任务队列, 只有微任务队列没有事件时, 才会读取宏任务队列. 这样的话, 如果主进程或者微任务的回调函数特别耗时间的话, <code>setTimeout</code> <code>setInterval</code>这些函数的定时是不准确的. </p>
-</li>
-<li><p>Promise新建后会立即执行, 其<code>then</code>方法会按照<code>event loop</code>执行. </p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout0&#x27;</span>);&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Promise&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout1&#x27;</span>)&#125;, <span class="number">0</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;resolved.&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi!&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">依次显示</span></span><br><span class="line"><span class="comment">Promise</span></span><br><span class="line"><span class="comment">Hi!</span></span><br><span class="line"><span class="comment">resolved</span></span><br><span class="line"><span class="comment">setTimeout0</span></span><br><span class="line"><span class="comment">setTimeout1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Promise对象的<code>then</code>方法接受2个参数, 第一个会在Promise对象的<code>fufilled</code>状态时执行, 第二个会在其<code>rejected</code>状态时执行. 不过不建议这种写法, 一般<code>then</code>处理<code>fufilled</code>状态, <code>catch</code>处理<code>rejected</code>状态, 在下面的代码中, p2会返回一个Promise对象, 所以其状态失效, 改为由p1决定. 所以, 代码执行后的第3秒, 会显示”Error: fail”. 错误会沿着异步操作链, 直到被第一个<code>catch</code>捕获. 如果没有<code>catch</code>捕获, 那该错误会成为未捕获错误, 但不会中断程序执行. </p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;fail&#x27;</span>)), <span class="number">3000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> resolve(p1), <span class="number">1000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">p2.then(<span class="function"><span class="params">result</span> =&gt;</span> <span class="built_in">console</span>.log(result))</span><br><span class="line">.catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.log(error))</span><br><span class="line"><span class="comment">// Error: fail</span></span><br></pre></td></tr></table></figure>
+<li><p>Promise新建后会立即执行, 其<code>then</code>方法会按照<code>Event Loop</code>执行.Promise对象的<code>then</code>方法接受2个参数, 第一个会在Promise对象的<code>fufilled</code>状态时执行, 第二个会在其<code>rejected</code>状态时执行. 不过不建议这种写法, 一般<code>then</code>处理<code>fufilled</code>状态, <code>catch</code>处理<code>rejected</code>状态.</p>
+<p>在下面的代码中, p2会返回一个Promise对象, 所以其状态失效, 改为由p1决定. 所以, 代码执行后的第3秒, 会显示”Error: fail”. 错误会沿着异步操作链, 直到被第一个<code>catch</code>捕获. 如果没有<code>catch</code>捕获, 那该错误会成为未捕获错误, 但不会中断程序执行. </p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> p1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;fail&#x27;</span>)), <span class="number">3000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> resolve(p1), <span class="number">1000</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">p2.then(<span class="function"><span class="params">result</span> =&gt;</span> <span class="built_in">console</span>.log(result))</span><br><span class="line">.catch(<span class="function"><span class="params">error</span> =&gt;</span> <span class="built_in">console</span>.log(error))</span><br><span class="line"><span class="comment">// Error: fail</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>Promise.prototype.finally()</code>方法, 不管异步操作最后抛出什么状态, 都会执行该函数回调函数内的操作, 并最终返回一个Promise对象. 如果前一个Promise对象有resolve值, 该Promise对象也有相应的resolve值; 如果前一个Promise对象有reject值, 那该Promise对象也有相应的reject值. </p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.resolve(<span class="number">2</span>).then(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;).finally(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">v</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(v)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//2</span></span><br></pre></td></tr></table></figure>
@@ -504,7 +501,7 @@
 </li>
 <li><p>ES6的模块是动态引用, 也就是说如果模块中的某个变量值发生了变化, 所有引用该模块的地方, 这个变量值都会变化.</p>
 </li>
-<li><p>由于Nodejs有自己的CommonJS模块格式, 所以需要一些策略来对这两种模块加载方式进行区分.</p>
+<li><p>由于Node.js有自己的CommonJS模块格式, 所以需要一些策略来对这两种模块加载方式进行区分.</p>
 <ul>
 <li><code>.cjs</code>的文件总是以CommonJS模块加载, <code>.mjs</code>的文件总是以ES6模块加载</li>
 <li><code>package.json</code>文件的<code>type</code>字段为空或<code>commonjs</code>则<code>.js</code>文件以CommonJS模块加载, 如果<code>type</code>字段为<code>module</code>则<code>.js</code>文件以ES6模块加载</li>
@@ -967,7 +964,7 @@
   <entry>
     <title>浏览器基础</title>
     <url>/blog/2020/08/31/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p>本文包含了部分浏览器的基础内容, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考.</p>
+    <content><![CDATA[<p>本文包含了浏览器的部分基础内容, 包括浏览器的工作原理, 客户端存储以及多线程的相关问题, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考. 本文包含了很多个人理解, 不一定是正确的, 这是我当前的认知水平.</p>
 <a id="more"></a>
 
 <h2 id="浏览器的工作原理概述"><a href="#浏览器的工作原理概述" class="headerlink" title="浏览器的工作原理概述"></a>浏览器的工作原理概述</h2><ol>
@@ -992,9 +989,8 @@
 <li>浏览器的工作当然是先从<code>用户界面(User Interface)</code>开始的. 用户的一些操作, 比如点击链接, 输入url跳往指定地址等会触发指令, 通过<code>浏览器引擎(Browser Engine)</code>传往<code>渲染引擎(Render Engine)</code></li>
 <li><code>浏览器引擎(Browser Engine)</code>还会从<code>数据持久层(Data Persistence)</code>中取出储存的数据, 如Cookie, 缓存等, 一并送往<code>渲染引擎(Render Engine)</code></li>
 <li>在<code>渲染引擎(Render Engine)</code>中, 由<code>loader</code>负责接收指令, 并且根据指令调用<code>网络(Networking)</code>, 获得相应的文件</li>
-<li>获得的文件中, HTML部分交由<code>HTML Parser</code>处理, 形成<code>DOM树(DOM Tree)</code>; 样式表部分交由<code>CSS Parser</code>处理, 形成CSS规则; JavaScript部分交由<code>JavaScript解释器(JavaScript Interpreter)</code>处理. 最终CSS, JavaScript的解析结果以及其他静态资源如图片会附加到DOM树上</li>
-<li>用户的一些动态操作结果也会被动态地附加到DOM树上, 进而也会动态触发后面的流程</li>
-<li>之后渲染引擎的<code>布局(Layout)</code>工作, 把包含样式的<code>渲染树(Render Tree)</code>转换成包含坐标信息的渲染树. 在首次布局之后, 再次发生的布局被称为<code>重排(Relayout)</code></li>
+<li>获得的文件中, HTML部分交由<code>HTML Parser</code>处理, 形成<code>DOM树(DOM Tree)</code>; 样式表部分交由<code>CSS Parser</code>处理, 形成样式规则; JavaScript部分交由<code>JavaScript解释器(JavaScript Interpreter)</code>处理, 把解析结果应用到DOM树和样式规则上. 最终解析完毕的样式规则会附加到DOM树上</li>
+<li>之后渲染引擎的<code>布局(Layout)</code>工作, 把包含样式规则的<code>渲染树(Render Tree)</code>转换成包含坐标信息的渲染树. 在首次布局之后, 再次发生的布局被称为<code>重排(Relayout)</code></li>
 <li>之后渲染引擎的<code>绘制(Paint)</code>工作, 调用<code>用户界面后端(UI Backend)</code>将每个节点绘制出来. 在首次绘制之后, 再次发生的绘制被称为<code>重绘(Repaint)</code></li>
 </ul>
 <p> <em>此部分参考了<a href="https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/">https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/</a>.</em></p>
@@ -1014,15 +1010,16 @@
 <li>避免频繁操作DOM, 可创建<code>documentFragment</code>, 在其上面进行DOM操作, 最后附加到DOM树上</li>
 </ul>
 </li>
-<li><p>HTML的解析过程, 是可能会被阻塞的. 我们知道HTML文件是自上而下解析的, 当遇到内联CSS和内联JavaScript以及外联的普通JavaScript时, 会暂停HTML解析, 进行相应的CSS和JavaScript下载和解析, 在所有HTML, CSS和JavaScript解析完毕后触发<code>DOMContentLoaded</code>事件. 当然, 还有一些文件如图片等也需要下载, 在这些所有的文件都下载并且加载完后会才触发<code>load</code>事件.</p>
-<p>外联的CSS本不会阻塞HTML解析, 但是JavaScript可能会操作样式, 所以浏览器在遇到<code>&lt;script&gt;</code>标签之前的外联CSS时会暂停HTML解析过程, 也就是说<code>&lt;script&gt;</code>标签之前的外联CSS会阻塞HTML解析, 之后的外联CSS就不会阻塞HTML解析了, 当然也不会阻塞<code>DOMContentLoaded</code>事件的触发.</p>
-<p>异步加载JavaScript的两个方式(可以见我的<a href="https://sien75.github.io/blog/2020/08/12/%E9%83%A8%E5%88%86ES6%E7%9F%A5%E8%AF%86/#Module">部分ES6知识-Module部分</a>)中, defer类会在整个同步代码解析完毕之后再解析, 会阻塞<code>DOMContentLoaded</code>事件的触发. 而async类的解析过程会阻塞同步代码解析, 进而阻塞<code>DOMContentLoaded</code>事件的触发, 但是如果在同步代码解析后async类内代码才下载完, 那其就不会阻塞<code>DOMContentLoaded</code>事件的触发了.</p>
-<p><em>此部分参考了<a href="https://juejin.im/post/6844903745730396174">https://juejin.im/post/6844903745730396174</a></em></p>
+<li><p>HTML的解析过程, 是可能会被普通<code>&lt;script&gt;</code>标签的下载和解析阻塞的. 我们知道HTML文件是自上而下解析成DOM的, 当遇到普通<code>&lt;script&gt;</code>标签时, 会暂停HTML解析, 进行相应的JavaScript(下载和)解析, 因为此时JavaScript可能会操作DOM.</p>
+<p>CSS不会阻塞HTML解析, 但会阻塞渲染树的生成, 也就是说CSS只有全部解析完毕才会附加到DOM上, 形成渲染树. 然而JavaScript可能会操作样式, 所以浏览器在遇到普通<code>&lt;script&gt;</code>标签之前的CSS时就会暂停HTML解析过程, 也就是说普通<code>&lt;script&gt;</code>标签之前的CSS会阻塞HTML解析, 之后的CSS就不会阻塞HTML解析了. 这其实是因为每个普通<code>&lt;script&gt;</code>解析完之后, 浏览器会渲染一次页面, 所以必须用到之前的CSS.</p>
+<p>DOM解析完毕(HTML解析和JavaScript解析的双重结果)时, 触发<code>DOMContentLoaded</code>事件. 当然, 这时的图片啊普通<code>&lt;script&gt;</code>标签之后的CSS啊等资源不一定下载解析完毕, 当所有资源下载解析完毕时, 触发<code>load</code>事件.</p>
+<p>异步加载JavaScript的两个方式(可以见我的<a href="https://sien75.github.io/blog/2020/08/12/%E9%83%A8%E5%88%86ES6%E7%9F%A5%E8%AF%86/#Module">部分ES6知识-Module部分</a>)中, defer类会在整个同步代码(HTML和普通<code>&lt;script&gt;</code>标签中的JavaScript)解析完毕之后再解析, 会阻塞<code>DOMContentLoaded</code>事件的触发. 而async类的解析过程会阻塞同步代码解析, 进而阻塞<code>DOMContentLoaded</code>事件的触发, 但是如果在同步代码解析后async类内代码才下载完, 那其就不会阻塞<code>DOMContentLoaded</code>事件的触发了.</p>
 </li>
 <li><p>下图为浏览器接口示意图(根据我自己的理解画的), 所谓Web API, 就是指使用JavaScript去读(获得)或写(控制)其它单位的方法. 这里的其他单位可能是渲染引擎, 也可能是其他JS线程, 也可能是硬件, 当然最终都是控制的硬件.</p>
 <p>每一种访问都有其专门的接口, 在JavaScript里面体现为一种特定的对象类型. 比如你</p>
 <ul>
-<li>想访问渲染引擎里的DOM, 那就用到了<code>Document</code>类型; 想访问Web Worker线程, 那就用到了<code>Worker</code>类型</li>
+<li>想访问渲染引擎里的DOM, 那就用到了<code>Document</code>类型</li>
+<li>想访问Web Worker线程, 那就用到了<code>Worker</code>类型</li>
 <li>想在内存里新建一定大小的数据, 那就用到了<code>ArrayBuffer</code>类型</li>
 <li>想访问硬盘上的二进制文件, 那就用到了<code>Blob</code>类型</li>
 <li>想通过网卡异步访问互联网的内容, 那就用到了<code>XMLHttpRequest</code>类型</li>
@@ -1071,11 +1068,35 @@
 
 </li>
 </ol>
-<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>关于浏览器的进程和线程. <code>进程(process)</code>是操作系统分配资源的最小单位, <code>线程(thread)</code>是程序执行的最小单位; 进程由线程组成, 进程间相互独立, 同一进程的线程之间共享资源; 线程切换比进程快.</p>
-<p>Chrome浏览器使用的是多进程隔离不同的标签页, 在每一个进程中, 有着渲染引擎线程, JavaScript解释器线程, 定时器线程, 事件线程以及网络线程等. 除了各标签页进程外, Chrome还有主进程, 扩展程序进程等. </p>
-<p>由于JavaScript解释器线程(一般称为主线程)和渲染引擎线程互斥, 所以如果JavaScript解释器线程上有一些耗时的代码, 那么必然会阻塞其他代码的执行, 也会阻塞页面的渲染. 所以, 如果我们需要运行一些耗时的代码时, 完全可以开辟一个新的线程, 这就是<code>Web Worker</code>. <code>Web Worker</code>实际上是存在于标签页进程内部的线程.</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><ol>
+<li><p>浏览器的进程和线程</p>
+<p><code>进程(process)</code>是操作系统分配资源的最小单位, <code>线程(thread)</code>是程序执行的最小单位; 进程由线程组成, 进程间相互独立, 同一进程的线程之间共享资源; 线程切换比进程快.</p>
+<p>Chrome浏览器使用的是多进程隔离不同的标签页, 在每一个进程中, 有着渲染引擎线程, JavaScript主线程, 定时器线程, 事件线程以及网络线程等. 除了各标签页进程外, Chrome还有主进程, 扩展程序进程等.</p>
+</li>
+<li><p><code>Web Worker</code>和<code>Service Worker</code></p>
+<p>JavaScript是设计用来操作DOM的语言, 为了避免复杂性, JavaScript是一种<strong>单线程</strong>语言. 由于JavaScript主线程和渲染引擎线程互斥, 所以如果JavaScript主线程上有一些耗时的代码, 那么必然会阻塞其他代码的执行, 也会阻塞页面的渲染. 所以, 如果我们需要运行一些耗时的代码时, 完全可以开辟一个新的线程, 这就是<code>Web Worker</code>. <code>Web Worker</code>实际上是存在于标签页进程内部的线程.</p>
 <p>然而<code>Web Worker</code>是跟随标签页进程的, 当标签页关闭了, 其工作也就结束了. 如果想持久化, 那就需要<code>Service Worker</code>.</p>
 <p><code>Service Worker</code>本身也是一个新的线程, 但是它是独立于标签页线程的, 标签页的关闭不会导致其结束. 而且, <code>Service Worker</code>还被赋予中间人代理的权利, 即抓取网络请求并作出修改, 再送给渲染引擎的权利. 借着这两点, 它可以做到对网络请求文件的缓存, 使页面可以离线访问. 它还有消息推送的能力, 使得Web网页变得更像一个本地应用.</p>
+</li>
+<li><p>事件循环(Event Loop)</p>
+<p><em>关于Node.js的事件循环, 见我的关于Node.js的文章<a href="">Node.js基础</a></em></p>
+<p>在Web中, 有大量的多线程操作, 比如I/O(ajax, 读文件等), UI交互, 定时器, 上面提到的Worker等, 为了不阻塞主线程, 它们最好是<strong>异步</strong>运行, 基于<strong>事件</strong>来通知主线程. 同时, 我们还可以通过Promise来对它们包装(Promise代表执行顺序, 是一种异步操作方式, 本身不会开辟新线程执行代码).</p>
+<p>浏览器的异步执行方式是这样的:</p>
+<p>JavaScript主线程中JavaScript解释器自上而下解释主任务代码, 根据作用域链对执行栈进行压栈弹栈, 遇到多线程代码会开辟子线程处理. 子线程的代码只要执行完毕, 就会触发事件通知主线程, 并往任务队列里面添加任务. 主线程接到事件通知, 待空闲时就会检测任务队列, 只要其中有任务, 就出队一个任务, 将其压入执行栈执行, 执行完毕后再次在任务队列里取任务, 直到任务队列为空. 这就是<code>事件循环(Event Loop)</code>机制.</p>
+<p>如下图所示, 任务分为两种, <code>micro task(微任务)</code>和<code>macro task(宏任务)</code>, 前者主要包含包含<code>Promise</code>, 后者包含主任务, <code>setTimeout</code>, <code>setInterval</code>, I/O, UI交互, postMessage等. JavaScript主线程会先从宏任务队列中出队一个任务来执行(第一次取出的就是主任务), 任务执行完毕后再读取微任务队列, 并按顺序执行所有的微任务, 只有微任务队列没有事件时, 才会再次读取宏任务队列. 这样的话, 如果某些前面的任务执行特别耗时间的话, <code>setTimeout</code>和<code>setInterval</code>这些函数的定时可能是不准确的.</p>
+<p><img src="./event_loop.png" alt="浏览器中的事件循环"></p>
+<p>关于<code>requestAnimationFrame</code>, 它是异步执行(基于事件)的, 但它既不是微任务, 也不是宏任务. 可以认为还存在一个<code>requestAnimationFrame</code>任务队列, 在每次事件循环的渲染步骤前(参考上图), 会检测是否有<code>requestAnimationFrame</code>任务, 并全部执行.</p>
+<blockquote>
+<p>在现代Chrome浏览器里面, <code>setTimeout</code>和<code>setInterval</code>的时间最小设置值是1(ms), 也就是说第二个参数设为1和0是一样的.</p>
+</blockquote>
+<blockquote>
+<p>由于一方面不好确认浏览器的最佳刷新间隔, 另一方面<code>setTimeout</code>和<code>setInterval</code>受到事件循环中延时的影响更大, 所以自定义动画推荐使用<code>requestAnimationFrame</code>.</p>
+</blockquote>
+<p>下面是关于浏览器事件循环的例子:</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout0&#x27;</span>);&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Promise&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout1&#x27;</span>)&#125;, <span class="number">0</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;resolved.&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi!&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">依次显示</span></span><br><span class="line"><span class="comment">Promise</span></span><br><span class="line"><span class="comment">Hi!</span></span><br><span class="line"><span class="comment">resolved</span></span><br><span class="line"><span class="comment">setTimeout0</span></span><br><span class="line"><span class="comment">setTimeout1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
 <h2 id="Web-Worker"><a href="#Web-Worker" class="headerlink" title="Web Worker"></a>Web Worker</h2><p><em>此部分参考了<a href="http://www.ruanyifeng.com/blog/2018/07/web-worker.html">http://www.ruanyifeng.com/blog/2018/07/web-worker.html</a></em></p>
 <ol>
 <li><p>基本用法.</p>
@@ -1104,6 +1125,30 @@
       </categories>
       <tags>
         <tag>浏览器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Node.js基础</title>
+    <url>/blog/2020/09/08/Node-js%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>本文包含了Node.js的部分基础内容, 包括…, 参考了… 请注意本文不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考.</p>
+<a id="more"></a>
+
+<h2 id="事件循环-Event-Loop"><a href="#事件循环-Event-Loop" class="headerlink" title="事件循环(Event Loop)"></a>事件循环(Event Loop)</h2><p><em>关于浏览器的事件循环, 见我的关于浏览器的文章<a href="https://sien75.github.io/blog/2020/08/31/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80/#%E5%A4%9A%E7%BA%BF%E7%A8%8B">浏览器基础</a></em></p>
+<p>在Node.js中, 有大量的多线程操作, 比如I/O(ajax, 读文件等), 定时器等, 为了不阻塞主线程, 它们最好是<strong>异步</strong>运行, 基于<strong>事件</strong>来通知主线程. 同时, 我们还可以通过Promise来对它们包装(Promise代表执行顺序, 是一种异步操作方式, 本身不会开辟新线程执行代码).</p>
+<p>此外, Node.js还规定了<code>process.nextTick</code>和<code>setImmediate</code>这两个函数, 用于在异步操作的不同时机触发事件, 产生任务.</p>
+<p>Node.js的异步执行方式是这样的:</p>
+<p>JavaScript主线程中JavaScript解释器自上而下解释主任务代码, 根据作用域链对执行栈进行压栈弹栈, 遇到多线程代码会开辟子线程处理. 子线程的代码只要执行完毕, 就会触发事件通知主线程, 并往任务队列里面添加任务. 主线程接到事件通知, 待空闲时就会检测任务队列, 只要其中有任务, 就出队一个任务, 将其压入执行栈执行, 执行完毕后再次在任务队列里取任务, 直到任务队列为空. 这就是<code>事件循环(Event Loop)</code>机制.</p>
+<p>如下图所示, 任务分为两种, <code>micro task(微任务)</code>和<code>macro task(宏任务)</code>, 前者主要包含包含<code>process.nextTick</code>, <code>Promise</code>, 后者包含主任务, <code>setTimeout</code>, <code>setInterval</code>, I/O, <code>setImmediate</code>等. JavaScript主线程会先从<strong>宏任务队列循环</strong>中出队一个宏任务队列(第一次取出的就是单一主任务), 执行这个队列中的所有宏任务, 任务执行完毕后再读取微任务队列, 并按顺序执行所有的微任务, 只有微任务队列没有事件时, 才会再次读取宏任务队列循环.</p>
+<p><img src="./event_loop.png" alt="Node.js中的事件循环"></p>
+<p>和浏览器不同的是, 首先我们可以认为Node.js的事件循环的微任务队列中<code>process.nextTick</code>总是在最前面的, 再者Node.js的宏任务队列有多个, 且并不是每次循环都只执行一个宏任务, 而是每次循环清空一个宏任务队列.</p>
+<p>下面是关于Node.js事件循环的例子:</p>
+]]></content>
+      <categories>
+        <category>Web前端基础</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Node.js</tag>
       </tags>
   </entry>
 </search>
