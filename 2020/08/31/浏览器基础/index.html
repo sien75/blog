@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-09-08
+      更新于:&nbsp;2020-09-11
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -257,7 +257,7 @@
 
   
   <div class="mdui-card-content mdui-typo mdui-p-x-4">
-    <p>本文包含了浏览器的部分基础内容, 包括浏览器的工作原理, 客户端存储以及多线程的相关问题, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考. 本文包含了很多个人理解, 不一定是正确的, 这是我当前的认知水平.</p>
+    <p>本文包含了浏览器的部分基础内容, 包括浏览器的工作原理, 客户端存储, 以及多线程的相关问题, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考. 本文包含了很多个人理解, 不一定是正确的, 这是我当前的认知水平.</p>
 <a id="more"></a>
 
 <h2 id="浏览器的工作原理概述"><a href="#浏览器的工作原理概述" class="headerlink" title="浏览器的工作原理概述"></a>浏览器的工作原理概述</h2><ol>
@@ -372,8 +372,8 @@
 <p><code>Service Worker</code>本身也是一个新的线程, 但是它是独立于标签页线程的, 标签页的关闭不会导致其结束. 而且, <code>Service Worker</code>还被赋予中间人代理的权利, 即抓取网络请求并作出修改, 再送给渲染引擎的权利. 借着这两点, 它可以做到对网络请求文件的缓存, 使页面可以离线访问. 它还有消息推送的能力, 使得Web网页变得更像一个本地应用.</p>
 </li>
 <li><p>事件循环(Event Loop)</p>
-<p><em>关于Node.js的事件循环, 见我的关于Node.js的文章<a href="">Node.js基础</a></em></p>
-<p>在Web中, 有大量的多线程操作, 比如I/O(ajax, 读文件等), UI交互, 定时器, 上面提到的Worker等, 为了不阻塞主线程, 它们最好是<strong>异步</strong>运行, 基于<strong>事件</strong>来通知主线程. 同时, 我们还可以通过Promise来对它们包装(Promise代表执行顺序, 是一种异步操作方式, 本身不会开辟新线程执行代码).</p>
+<p><em>关于Node.js的事件循环, 见我的关于Node.js的文章<a href="https://sien75.github.io/blog/2020/09/08/Node-js%E5%9F%BA%E7%A1%80/#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF-Event-Loop">Node.js基础</a></em></p>
+<p>在Web中, 有大量的多线程操作, 比如I/O(ajax, 读文件等), UI交互, 定时器, 上面提到的Worker等, 为了不阻塞主线程, 它们最好是<strong>异步</strong>运行, 基于<strong>事件</strong>来通知主线程. 同时, 我们还可以通过Promise来对它们包装(Promise代表执行顺序, 是一种异步包装方式, 本身不会开辟新线程执行代码).</p>
 <p>浏览器的异步执行方式是这样的:</p>
 <p>JavaScript主线程中JavaScript解释器自上而下解释主任务代码, 根据作用域链对执行栈进行压栈弹栈, 遇到多线程代码会开辟子线程处理. 子线程的代码只要执行完毕, 就会触发事件通知主线程, 并往任务队列里面添加任务. 主线程接到事件通知, 待空闲时就会检测任务队列, 只要其中有任务, 就出队一个任务, 将其压入执行栈执行, 执行完毕后再次在任务队列里取任务, 直到任务队列为空. 这就是<code>事件循环(Event Loop)</code>机制.</p>
 <p>如下图所示, 任务分为两种, <code>micro task(微任务)</code>和<code>macro task(宏任务)</code>, 前者主要包含包含<code>Promise</code>, 后者包含主任务, <code>setTimeout</code>, <code>setInterval</code>, I/O, UI交互, postMessage等. JavaScript主线程会先从宏任务队列中出队一个任务来执行(第一次取出的就是主任务), 任务执行完毕后再读取微任务队列, 并按顺序执行所有的微任务, 只有微任务队列没有事件时, 才会再次读取宏任务队列. 这样的话, 如果某些前面的任务执行特别耗时间的话, <code>setTimeout</code>和<code>setInterval</code>这些函数的定时可能是不准确的.</p>
@@ -386,7 +386,7 @@
 <p>由于一方面不好确认浏览器的最佳刷新间隔, 另一方面<code>setTimeout</code>和<code>setInterval</code>受到事件循环中延时的影响更大, 所以自定义动画推荐使用<code>requestAnimationFrame</code>.</p>
 </blockquote>
 <p>下面是关于浏览器事件循环的例子:</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout0&#x27;</span>);&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Promise&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout1&#x27;</span>)&#125;, <span class="number">0</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;resolved.&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi!&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">依次显示</span></span><br><span class="line"><span class="comment">Promise</span></span><br><span class="line"><span class="comment">Hi!</span></span><br><span class="line"><span class="comment">resolved</span></span><br><span class="line"><span class="comment">setTimeout0</span></span><br><span class="line"><span class="comment">setTimeout1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout0&#x27;</span>);&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Promise&#x27;</span>);</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;<span class="built_in">console</span>.log(<span class="string">&#x27;setTimeout1&#x27;</span>)&#125;, <span class="number">0</span>);</span><br><span class="line">    resolve();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">(<span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">await</span> promise;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;resolved&#x27;</span>);</span><br><span class="line">&#125;());</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;Hi!&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">依次显示</span></span><br><span class="line"><span class="comment">Promise</span></span><br><span class="line"><span class="comment">Hi!</span></span><br><span class="line"><span class="comment">resolved</span></span><br><span class="line"><span class="comment">setTimeout0</span></span><br><span class="line"><span class="comment">setTimeout1</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 </li>
 </ol>
