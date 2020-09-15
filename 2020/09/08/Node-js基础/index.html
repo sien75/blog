@@ -379,7 +379,7 @@
 <h2 id="EventEmitter"><a href="#EventEmitter" class="headerlink" title="EventEmitter"></a>EventEmitter</h2><p><em>我的疑问: EventEmitter是怎么和Event Loop结合的呢? eventEmitter.emit()这个函数是在什么地方被调用的呢?</em></p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> EventEmitter = <span class="built_in">require</span>(<span class="string">&#x27;events&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> EventEmitter();</span><br><span class="line">eventEmitter.on(<span class="string">&#x27;event&#x27;</span>, <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a, b);</span><br><span class="line">&#125;);</span><br><span class="line">eventEmitter.emit(<span class="string">&#x27;event&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//等同于</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> _ = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a, b);</span><br><span class="line">&#125;;</span><br><span class="line">_(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
 <p>EventEmitter只是改变了”回调地狱”的书写方式, 本身还是同步运行的.</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他的关于fs, http, stream, buffer就不多介绍了.</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他的关于fs, http, stream, buffer就不多介绍了, 都是看一看就会的.</p>
 <p>不过有一点要提一下. ArrayBuffer是es6里面规定的, 代表储存二进制数据的一段内存.</p>
 <p>而TypedArray也是es6里面规定的, 是以指定格式解读ArrayBuffer的一种方法, Uinit8Array是TypedArray(视图)的一种.</p>
 <p>Node.js中的Buffer类就是继承自Uint8Array. Buffer类的对象内部实际存在一个ArrayBuffer类的对象, 所以可以认为Buffer是ES6标准中的ArrayBuffer和Uinit8Array的结合体.</p>
@@ -395,6 +395,11 @@
   <div class="mdui-divider"></div>
   
   <nav>
+    
+      <a rel="prev" class="post-nav-item mdui-float-left" href="/blog/2020/09/13/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E6%A6%82%E8%BF%B0/">
+        <i class="iconfont icon-angle-left"></i>
+        <span>前端工程化概述</span>
+      </a>
     
     
       <a rel="next" class="post-nav-item mdui-float-right" href="/blog/2020/08/31/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9F%BA%E7%A1%80/">

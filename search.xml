@@ -1248,7 +1248,7 @@
 <h2 id="EventEmitter"><a href="#EventEmitter" class="headerlink" title="EventEmitter"></a>EventEmitter</h2><p><em>我的疑问: EventEmitter是怎么和Event Loop结合的呢? eventEmitter.emit()这个函数是在什么地方被调用的呢?</em></p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> EventEmitter = <span class="built_in">require</span>(<span class="string">&#x27;events&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> eventEmitter = <span class="keyword">new</span> EventEmitter();</span><br><span class="line">eventEmitter.on(<span class="string">&#x27;event&#x27;</span>, <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a, b);</span><br><span class="line">&#125;);</span><br><span class="line">eventEmitter.emit(<span class="string">&#x27;event&#x27;</span>, <span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//等同于</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> _ = <span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a, b);</span><br><span class="line">&#125;;</span><br><span class="line">_(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
 <p>EventEmitter只是改变了”回调地狱”的书写方式, 本身还是同步运行的.</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他的关于fs, http, stream, buffer就不多介绍了.</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>其他的关于fs, http, stream, buffer就不多介绍了, 都是看一看就会的.</p>
 <p>不过有一点要提一下. ArrayBuffer是es6里面规定的, 代表储存二进制数据的一段内存.</p>
 <p>而TypedArray也是es6里面规定的, 是以指定格式解读ArrayBuffer的一种方法, Uinit8Array是TypedArray(视图)的一种.</p>
 <p>Node.js中的Buffer类就是继承自Uint8Array. Buffer类的对象内部实际存在一个ArrayBuffer类的对象, 所以可以认为Buffer是ES6标准中的ArrayBuffer和Uinit8Array的结合体.</p>
@@ -1260,6 +1260,48 @@
       <tags>
         <tag>JavaScript</tag>
         <tag>Node.js</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端工程化概述</title>
+    <url>/blog/2020/09/13/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p>由于前端项目变得越来越复杂, 如何保证前端项目的多人协同的开发质量和开发效率, 成为越来越重要的问题. 将软件工程引入前端项目, 使前端工程化, 是解决问题的最好办法.</p>
+<a id="more"></a>
+
+<h2 id="前端工程化概述"><a href="#前端工程化概述" class="headerlink" title="前端工程化概述"></a>前端工程化概述</h2><p><em>此部分参考了<a href="https://www.zhihu.com/question/24558375">https://www.zhihu.com/question/24558375</a></em></p>
+<p>前端工程化应该从模块化, 组件化, 规范化和自动化四个方面来考虑.</p>
+<ol>
+<li><p>模块化</p>
+<p>模块化就是指在文件层面上对复杂的项目进行分割, 并将其合理组装起来的思想. 这是进行多人协作和功能划分的基本保证.</p>
+<ul>
+<li>JavaScript的模块化. 在之前出现过AMD, CMD, 以及CommonJS等模块加载方案, 不过现在ES6已经在语言层面对模块系统进行了规定, 详见我的<a href="https://sien75.github.io/blog/2020/08/12/%E9%83%A8%E5%88%86ES6%E7%9F%A5%E8%AF%86/#Module">部分ES6知识-Module</a></li>
+<li>CSS的模块化, 某个CSS文件引入其他的CSS文件可以使用Sass的<code>@import</code>, 而为了解决CSS的全局选择器的冲突, 可以采用CSS Modules</li>
+</ul>
+<p>目前的构建工具中, Webpack最为流行. Webpack不仅允许使用ES6的module方法引入JavaScript文件, 还可以通过各种Loader, 同样使用ES6的module方法引入TypeScript, CSS, Sass和静态资源.</p>
+</li>
+<li><p>组件化</p>
+<p>组件化是在UI层面上对各部分进行拆分, 然后按需组合的思想. 组件之间也有继承, 包含等关系. 现在一般通过使用框架来进行组件化, 如Vue.</p>
+</li>
+<li><p>规范化</p>
+<p>所谓规范化, 就是确定开发的标准, 包括目录结构的规定, 接口规范, git规范和UI视觉规范等.</p>
+</li>
+<li><p>自动化</p>
+<p>自动化就是把简单重复的工作交给机器, 使人着眼于真正的问题, 而不是繁琐的步骤. 像Webpack就是一个自动化构建工具, 开发项目时无需关心如何使代码在浏览器上运行, 这个工作由Webpack完成了.</p>
+</li>
+</ol>
+<h2 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h2><p>Webpack是一个自动化构建工具. 开发者使用了一套便于大型项目开发的体系, 但是这种体系是浏览器无法理解的, 这里面比如ES6, TypeScript, Sass, vue等, 这些浏览器无法理解的开发技术是为了更好地开发大型前端项目. Webpack就是担任这样一个角色: 把多个开发文件打包成浏览器可以理解的几个HTML, CSS, JavaScript和图片文件. 此外, Webpack还会自动地监听本地代码变化并重新构建, 并且做一些文件优化, 代码校验等.</p>
+<p>这里附加一个使用Vue的项目的简单配置:</p>
+<p>webpack.config.js</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">&#x27;./main.js&#x27;</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">&#x27;bundle.js&#x27;</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">&#x27;./dist&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">        use: [<span class="string">&#x27;vue-loader&#x27;</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  devtool: <span class="string">&#x27;source-map&#x27;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>package.json</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&quot;dependencies&quot;: &#123;</span><br><span class="line">    &quot;vue&quot;: &quot;^2.4.2&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;css-loader&quot;: &quot;^0.28.5&quot;,</span><br><span class="line">    &quot;vue-loader&quot;: &quot;^13.0.4&quot;,</span><br><span class="line">    &quot;vue-template-compiler&quot;: &quot;^2.4.2&quot;,</span><br><span class="line">    &quot;webpack&quot;: &quot;^3.4.0&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Web前端基础</category>
+      </categories>
+      <tags>
+        <tag>前端工程化</tag>
+        <tag>Webpack</tag>
       </tags>
   </entry>
 </search>
