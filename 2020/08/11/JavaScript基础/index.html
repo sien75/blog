@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-09-04
+      更新于:&nbsp;2020-09-21
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -257,7 +257,7 @@
 
   
   <div class="mdui-card-content mdui-typo mdui-p-x-4">
-    <p>本文为《JavaScript高级程序设计》（第3版）前14章的笔记，没有全部摘录，不是关于JavaScript的教程，如果您对JavaScript不熟悉，强烈建议您阅读《JavaScript高级程序设计》（第3版），该书对ES5标准的JavaScript有既详实又易懂的介绍。在经过几次面试后，深感自己的JavaScript基础知识不是很好，所以又重新读了这本书的前14章，并把其中的有利于理解JavaScript的基础概念（如<strong>原型链</strong>、事件流），以及一些我觉得有价值的知识点整理了一下，在其上做了些补充。另外，如本文和es6有冲突，以es6为准。</p>
+    <p>本文为《JavaScript高级程序设计》（第3版）前14章的笔记，没有全部摘录，不是关于JavaScript的教程，如果您对JavaScript不熟悉，强烈建议您阅读《JavaScript高级程序设计》（第3版），该书对ES5标准的JavaScript有既详实又易懂的介绍。在经过几次面试后，深感自己的JavaScript基础知识不是很好，所以又重新读了这本书的前14章，并把其中的有利于理解JavaScript的基础概念（如<strong>原型链</strong>、事件流），以及一些我觉得有价值的知识点整理了一下，在其上做了些补充。另外，如本文和ES6有冲突，以ES6为准。</p>
 <a id="more"></a>
 
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
@@ -267,7 +267,7 @@
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> test1 = <span class="number">1</span>;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    test2 = <span class="number">2</span>;</span><br><span class="line">&#125;)()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.test1 === test1);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">window</span>.test2 === test2);<span class="comment">//true</span></span><br></pre></td></tr></table></figure></li>
 <li><p>ECMAScript有5中基本数据类型，分别是<code>Undefined</code> <code>Null</code> <code>Boolean</code> <code>String</code> <code>Number</code>。</p>
 </li>
-<li><p><code>typeof null === &#39;object&#39;</code>，typeof共有5种结果，分别是<code>&#39;undefined&#39;</code> <code>&#39;boolean&#39;</code> <code>&#39;string&#39;</code> <code>&#39;number&#39;</code> <code>&#39;object&#39;</code> <code>&#39;function&#39;</code>。</p>
+<li><p><code>typeof null === &#39;object&#39;</code>，typeof共有6种结果，分别是<code>&#39;undefined&#39;</code> <code>&#39;boolean&#39;</code> <code>&#39;string&#39;</code> <code>&#39;number&#39;</code> <code>&#39;object&#39;</code> <code>&#39;function&#39;</code>。</p>
 </li>
 <li><p>不需要显式指定<code>undefined</code>值，仅用作比较；未声明和未初始化的变量都是<code>undefined</code>。</p>
 </li>
@@ -327,6 +327,34 @@
 </li>
 </ol>
 <h2 id="面向对象的程序设计"><a href="#面向对象的程序设计" class="headerlink" title="面向对象的程序设计"></a>面向对象的程序设计</h2><ol>
+<li><p>对象有两种属性: 数据属性和访问器属性.</p>
+<p>直接定义的属性都是数据属性, 数据属性有4个描述其行为的特性:</p>
+<ul>
+<li><p>Configurable, 能否通过<code>delete</code>删除属性, 能否修改Configurale和Enumerable, 能否修改Writable为<code>true</code>, 能否将属性变更为访问器属性</p>
+</li>
+<li><p>Enumerable, 能否通过for-in访问到属性</p>
+</li>
+<li><p>Writable, 能否更改属性的值</p>
+</li>
+<li><p>Value, 属性的值<br>直接定义的属性前三个特性值都为<code>true</code>, Value为指定的值或<code>undefined</code>. 除了直接定义, 我们还可以通过<code>Object.defineProperty</code>来定义和修改对象的数据属性. 例子如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    value: <span class="string">&#x27;value&#x27;</span>,</span><br><span class="line">    enumerable: <span class="string">`true`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>前三个特性值不指定均默认为<code>false</code>, 即该数据属性不可删除, 不可枚举, 也不可修改属性值, Configurale和Enumerable也不能修改, Writable不能由<code>false</code>修改为<code>true</code>.</p>
+<p>访问器属性不包括Value, 它包括以下4个描述其行为的特性:</p>
+<ul>
+<li>Configurable, 能否通过<code>delete</code>删除属性, 能否修改属性的4个特性, 能否将属性变更为访问器属性</li>
+<li>Enumerable, 能否通过for-in访问到属性</li>
+<li>Set, 在写入时调用的函数</li>
+<li>Get, 在读取时调用的函数<br>访问器属性不能直接定义, 需要通过<code>Object.defineProperty</code>来定义和修改对象的访问器属性, 指定Get或Set即为设置访问器属性. 例子如下:<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;<span class="attr">_a</span>: <span class="number">1</span>&#125;;</span><br><span class="line"><span class="built_in">Object</span>.defineProperty(obj, <span class="string">&#x27;name&#x27;</span>, &#123;</span><br><span class="line">    configurable: <span class="literal">true</span>,</span><br><span class="line">    enumerable: <span class="literal">true</span>,</span><br><span class="line">    set: <span class="function"><span class="keyword">function</span> (<span class="params">v</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">this</span>._a = v;</span><br><span class="line">    &#125;,</span><br><span class="line">    get: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>._a;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>可以通过<code>Object.defineProperties</code>定义多个属性.</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperties(obj, &#123;</span><br><span class="line">    <span class="string">&#x27;name1&#x27;</span>: &#123;&#125;,</span><br><span class="line">    <span class="string">&#x27;name2&#x27;</span>: &#123;&#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>Object.getOwnPropertyDescriptor(obj, &#39;name&#39;)</code>来读取属性的特性.</p>
+</li>
+</ul>
+</li>
 <li><p>按照构造函数模式创建对象：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;Sam&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> person = <span class="keyword">new</span> Person();</span><br><span class="line"><span class="comment">//等同于</span></span><br><span class="line"><span class="keyword">var</span> person = &#123;&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.name = <span class="string">&#x27;Sam&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">Person.call(person);</span><br><span class="line"><span class="comment">//构造函数的实际过程</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -340,15 +368,106 @@
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.superValue = <span class="string">&#x27;super&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.subValue = <span class="string">&#x27;sub&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.getValue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.superValue;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype = <span class="keyword">new</span> SuperType();</span><br><span class="line">SubType.prototype.getValue = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.subValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType();</span><br><span class="line"><span class="keyword">with</span>(instance) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getValue(), superValue, subValue);</span><br><span class="line">&#125;<span class="comment">//sub super sub</span></span><br></pre></td></tr></table></figure>
 <p> <img src="./prototype.png" alt="prototype"></p>
 </li>
-<li><p>搜索对象属性和方法会按照实例-原型依次向上查找，直到找到为止，所以实例中的属性和方法可以屏蔽掉原型中的属性和方法，如4中的getValue。<br>为了确定属性和方法的来源，以及获取所有属性和方法，可以按照以下思路：<br>本身可迭代属性和方法的获得<code>Object.keys(instance)</code><br>所有可迭代属性和方法的获得<code>for(i in instance)</code><br>本身可迭代属性和方法的检测<code>instance.hasOwnProperty(propertyName)</code><br>所有可迭代属性和方法的检测<code>propertyName in instance</code></p>
+<li><p>搜索对象属性和方法会按照实例-原型依次向上查找, 直到找到为止, 所以实例中的属性和方法可以屏蔽掉原型中的属性和方法, 如4中的getValue. 为了确定属性和方法的来源, 以及获取所有属性和方法, 可以按照以下表格的思路(Symbol类型是ES6中的新数据类型, 为了总结, 将它的遍历和检测方法一并放到这里):</p>
+<p>遍历方法:</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">自身可迭代属性</th>
+<th align="center">自身不可迭代属性</th>
+<th align="center">自身Symbol属性</th>
+<th align="center">继承可迭代属性</th>
+<th align="center">继承不可迭代属性</th>
+<th align="left">继承Symbol属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>Object.keys(obj)</code></td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>Object.getOwnPropertyNames(obj)</code></td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>for(name in obj)</code></td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>Object.getOwnPropertySymbols(obj)</code></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>Reflect.ownKeys(obj)</code></td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<p>检测方法:</p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">自身可迭代属性</th>
+<th align="center">自身不可迭代属性</th>
+<th align="center">自身Symbol属性</th>
+<th align="center">继承可迭代属性</th>
+<th align="center">继承不可迭代属性</th>
+<th align="left">继承Symbol属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><code>obj.hasOwnProperty(name)</code></td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center"><code>name in obj</code></td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="center">*</td>
+<td align="left">*</td>
+</tr>
+</tbody></table>
 </li>
 <li><p>使用原型链进行方法和共享属性的继承，使用构造函数进行一般属性的继承，这就是组合继承。组合继承如下：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span> (<span class="params">v</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.superValue = v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span> (<span class="params">sup, sub</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.subValue = sub;</span><br><span class="line">    SuperType.call(<span class="built_in">this</span>, sup);<span class="comment">//通过构造函数继承一般属性，第2次调用SuperValue</span></span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.getSuper = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.superValue;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype = <span class="keyword">new</span> SuperType(<span class="string">&#x27;super0&#x27;</span>);<span class="comment">//通过原型链继承方法和共享属性，第1次调用SuperValue</span></span><br><span class="line">SubType.prototype.getSub = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.subValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType(<span class="string">&#x27;super1&#x27;</span>, <span class="string">&#x27;sub&#x27;</span>);</span><br><span class="line"><span class="keyword">with</span>(instance) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getSub(), getSuper());</span><br><span class="line">&#125;<span class="comment">//sub super1</span></span><br></pre></td></tr></table></figure>
 <p> 构造函数、原型和实例的关系如图：<br> <img src="./combination_inheritance.png" alt="组合继承"></p>
 </li>
 <li><p>可以看出，组合继承两次调用SuperValue，使得instance.superValue被定义了两次，发生了重复。我们的原则是一般的属性不应该进入原型链，共享属性和<br>方法进入原型链，实现真正的共享属性和方法通过原型链继承，一般属性通过构造函数继承，寄生组合继承是最终的解决方案。</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span> (<span class="params">prototype</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">    F.prototype = prototype;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span> (<span class="params">v</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.superValue = v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span> (<span class="params">sup, sub</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.subValue = sub;</span><br><span class="line">    SuperType.call(<span class="built_in">this</span>, sup);<span class="comment">//通过构造函数继承一般属性</span></span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.getSuper = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.superValue;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype = inheritPrototype(SuperType.prototype);<span class="comment">//通过原型链继承方法和共享属性</span></span><br><span class="line">SubType.prototype.getSub = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.subValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType(<span class="string">&#x27;super&#x27;</span>, <span class="string">&#x27;sub&#x27;</span>);</span><br><span class="line"><span class="keyword">with</span>(instance) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getSub(), getSuper());</span><br><span class="line">&#125;<span class="comment">//sub super</span></span><br></pre></td></tr></table></figure>
-<p> <img src="./parasitic_combination_inheritance.png" alt="寄生组合继承"></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inheritPrototype</span> (<span class="params">prototype</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">F</span> (<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">    F.prototype = prototype;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SuperType</span> (<span class="params">v</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.superValue = v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SubType</span> (<span class="params">sup, sub</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">this</span>.subValue = sub;</span><br><span class="line">    SuperType.call(<span class="built_in">this</span>, sup);<span class="comment">//通过构造函数继承一般属性</span></span><br><span class="line">&#125;</span><br><span class="line">SuperType.prototype.getSuper = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.superValue;</span><br><span class="line">&#125;</span><br><span class="line">SubType.prototype = inheritPrototype(SuperType.prototype);<span class="comment">//通过原型链继承方法和共享属性</span></span><br><span class="line">SubType.prototype.getSub = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.subValue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> instance = <span class="keyword">new</span> SubType(<span class="string">&#x27;super&#x27;</span>, <span class="string">&#x27;sub&#x27;</span>);</span><br><span class="line"><span class="keyword">with</span>(instance) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(getSub(), getSuper());</span><br><span class="line">&#125;<span class="comment">//sub super</span></span><br></pre></td></tr></table></figure>
+<p><img src="./parasitic_combination_inheritance.png" alt="寄生组合继承"></p>
 </li>
 </ol>
 <h2 id="函数表达式"><a href="#函数表达式" class="headerlink" title="函数表达式"></a>函数表达式</h2><ol>
@@ -359,7 +478,12 @@
 <li><p>为了防止函数名字发生改变而影响递归的使用，可以使用命名函数表达式，以下代码利用递归实现了阶乘：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> factorial = <span class="function"><span class="keyword">function</span> <span class="title">f</span> (<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> n &lt;= <span class="number">1</span> ? <span class="number">1</span> : n * f(n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line">factorial(<span class="number">4</span>);<span class="comment">//24</span></span><br><span class="line">f;<span class="comment">//undefined，在外部不会访问到f这个变量</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>匿名函数的this === window，也就是说只要函数没有名字，它的this就指向window。（未使用bind、apply、call等）</p>
+<li><p>关于this的指代, 两句话:</p>
+<ul>
+<li>普通函数this指向函数的调用者, 如obj.fun()指向obj, fun()指向globalThis, fun.apply(obj)指向obj</li>
+<li>箭头函数始终指向函数所在的作用域(普通函数)的调用者<br>匿名函数的话, 调用者是globalThis, 所以this指向globalThis. 下面是例子:<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> fun = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    fun0: fun,</span><br><span class="line">    fun1() &#123;</span><br><span class="line">        fun()</span><br><span class="line">    &#125;,</span><br><span class="line">    fun2() &#123;</span><br><span class="line">        (<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="built_in">this</span>)</span><br><span class="line">        &#125;)()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.fun0();<span class="comment">//obj</span></span><br><span class="line">obj.fun1();<span class="comment">//Window</span></span><br><span class="line">obj.fun2();<span class="comment">//obj</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><em>此部分参考了<a target="_blank" rel="noopener" href="https://juejin.im/post/6844903511868571656">https://juejin.im/post/6844903511868571656</a></em></p>
 </li>
 <li><p>JavaScript没有块级作用域概念，可以使用函数来模拟：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
@@ -433,6 +557,47 @@
 </li>
 </ol>
 <h2 id="DOM"><a href="#DOM" class="headerlink" title="DOM"></a>DOM</h2><ol>
+<li><p>通过一个节点的<code>nodeType</code>属性, 可以获得节点的类型, 详情如下:</p>
+<table>
+<thead>
+<tr>
+<th align="center">常量</th>
+<th align="center">值</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Node.ELEMENT_NODE</td>
+<td align="center">1</td>
+<td align="center">元素节点</td>
+</tr>
+<tr>
+<td align="center">Node.TEXT_NODE</td>
+<td align="center">3</td>
+<td align="center">文本节点</td>
+</tr>
+<tr>
+<td align="center">Node.COMMENT_NODE</td>
+<td align="center">8</td>
+<td align="center">注释节点</td>
+</tr>
+<tr>
+<td align="center">Node.DOCUMENT_NODE</td>
+<td align="center">9</td>
+<td align="center">Document节点, 一般是html节点和DOCTYPE节点的父节点</td>
+</tr>
+<tr>
+<td align="center">Node.DOCUMENT_TYPE_NODE</td>
+<td align="center">10</td>
+<td align="center">DOCTYPE节点</td>
+</tr>
+<tr>
+<td align="center">Node.DOCUMENT_FRAGMENT_NODE</td>
+<td align="center">11</td>
+<td align="center">文档片段节点, 虚拟DOM, 不在真实DOM中</td>
+</tr>
+</tbody></table>
+</li>
 <li><p>NodeList是一组有序的节点，有length属性，可以通过[]访问其值，但是它不是Array的实例。</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> nodes = <span class="built_in">Array</span>.prototype.slice.call(aNodeList, <span class="number">0</span>);<span class="comment">//将NodeList转换成数组</span></span><br></pre></td></tr></table></figure>
 </li>
@@ -441,17 +606,17 @@
 <li><p>使用<code>document.documentElement</code>或<code>document.lastChild</code>访问&lt;html&gt;对象，使用<code>document.body</code>访问&lt;body&gt;对象，使用<code>document.head</code>访问&lt;head&gt;对象。</p>
 </li>
 <li><p>使用<code>document.createElement()</code>创建元素节点，使用<code>document.createTextNode()</code>创建文本节点，使用<code>textNode.nodeValue</code>获得文本节点的文本。</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> ele = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> txt = docuemnt.createTextNode(<span class="string">&#x27;hello!&#x27;</span>);</span><br><span class="line">ele.appendChild(txt);</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(ele);</span><br><span class="line">cosole.log(<span class="built_in">document</span>.lastElementChild.firstElementChild.nodeValue);<span class="comment">//hello!</span></span><br></pre></td></tr></table></figure>
+ <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> ele = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> txt = <span class="built_in">document</span>.createTextNode(<span class="string">&#x27;hello!&#x27;</span>);</span><br><span class="line">ele.appendChild(txt);</span><br><span class="line"><span class="built_in">document</span>.body.appendChild(ele);</span><br><span class="line">cosole.log(<span class="built_in">document</span>.lastElementChild.firstElementChild.nodeValue);<span class="comment">//hello!</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p><code>document.querySelector()</code>和<code>document.querySelectorAll()</code>方法均接受一个CSS选择符，分别返回匹配的第一个元素和所有元素的NodeList。</p>
 </li>
-<li><p>Node之间的父子兄弟关系推荐用<code>parentNode</code> <code>children</code> <code>firstElementChild</code> <code>lastElementChild</code> <code>previousElementSibling</code> <code>nextElementSibling</code>来表示。</p>
+<li><p>关于Node之间的父子兄弟关系, <code>parentElement</code> <code>children</code> <code>firstElementChild</code> <code>lastElementChild</code> <code>previousElementSibling</code> <code>nextElementSibling</code>系列仅会考虑元素节点, 即nodeValue为1的Node; <code>parentNode</code> <code>childNodes</code> <code>firstChild</code> <code>lastChild</code> <code>previousSibling</code> <code>lastSibling</code>系列会考虑所有类型节点, 包括文本节点, Document节点等.</p>
 </li>
 <li><p>Node的class操作可以不使用<code>className</code>，而使用<code>classList</code>，<code>classList</code>是<code>DOMTokenList</code>的实例，有下列方法：</p>
  <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ele.classList.add(<span class="string">&#x27;some-class&#x27;</span>);</span><br><span class="line">ele.classList.remove(<span class="string">&#x27;some-class&#x27;</span>);</span><br><span class="line">ele.classList.contains(<span class="string">&#x27;some-class&#x27;</span>);</span><br><span class="line">ele.clsssList.toggle(<span class="string">&#x27;some-class&#x27;</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>关于焦点：</p>
- <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ele.focus();<span class="comment">//使该元素获取焦点</span></span><br><span class="line">ele.blur();<span class="comment">//使该元素失去焦点</span></span><br><span class="line">ele.hasFocus();<span class="comment">//测试该元素是否获取了焦点</span></span><br><span class="line"><span class="built_in">document</span>.activeElement;<span class="comment">//取得当前获取焦点的元素</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">ele.focus();<span class="comment">//使该元素获取焦点</span></span><br><span class="line">ele.blur();<span class="comment">//使该元素失去焦点</span></span><br><span class="line">ele.hasFocus();<span class="comment">//测试该元素是否获取了焦点</span></span><br><span class="line"><span class="built_in">document</span>.activeElement;<span class="comment">//取得当前获取焦点的元素</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>除了&lt;meta&gt;外，也可以直接使用<code>document.charset</code>设置字符集，该值默认为<code>&#39;UTF-16&#39;</code>。</p>
 </li>

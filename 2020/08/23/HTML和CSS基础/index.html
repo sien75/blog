@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-09-01
+      更新于:&nbsp;2020-09-21
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -444,7 +444,7 @@
  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*两者意思等同, 表示会缩短来适应容器, 但不会索取剩余空间, 并根据自己的width和height来设置尺寸*/</span></span><br><span class="line"><span class="selector-id">#ele</span> &#123;</span><br><span class="line">    <span class="attribute">flex</span>: initial;</span><br><span class="line">    <span class="attribute">flex</span>: <span class="number">0</span> <span class="number">1</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*两者意思相同, 表示会索取剩余空间, 会缩短来适应容器, 并根据自己的width和height来设置尺寸, 义如其名&quot;自动&quot;*/</span></span><br><span class="line"><span class="selector-id">#ele</span> &#123;</span><br><span class="line">    <span class="attribute">flex</span>: auto;</span><br><span class="line">    <span class="attribute">flex</span>: <span class="number">1</span> <span class="number">1</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
  <figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*两者意思相同, 表示既不索取, 也不缩短, 完全按照设定的width和height设置尺寸, 成为非弹性元素*/</span></span><br><span class="line"><span class="selector-id">#ele</span> &#123;</span><br><span class="line">    <span class="attribute">flex</span>: none;</span><br><span class="line">    <span class="attribute">flex</span>: <span class="number">0</span> <span class="number">0</span> auto;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> <a target="_blank" rel="noopener" href="https://www.cnblogs.com/moxiaowohuwei/p/8267624.html">关于flex三个值含义可参考这里</a></p>
+<p> <em><a target="_blank" rel="noopener" href="https://www.cnblogs.com/moxiaowohuwei/p/8267624.html">关于flex三个值含义可参考这里</a></em></p>
 <p> 通过在flex容器上设置<code>align-items</code>属性控制flex项在交叉轴上的位置, 可选值有</p>
 <ul>
 <li><p>stretch(默认), 交叉轴方向拉伸填满</p>
@@ -489,18 +489,22 @@
 </li>
 <li><p>关于水平居中, 垂直居中.</p>
 <ul>
-<li><p>首先父元素是内联元素, 那父元素完全由子元素撑开, 设置父元素的padding或子元素的margin就可以居中了</p>
+<li>父元素是内联元素, 那父元素完全由子元素撑开, 设置父元素的padding或子元素的margin就可以居中了</li>
+<li>父元素是块级元素<ul>
+<li>子元素是块级元素, 设置了宽度, 可以使用<code>margin: 0 auto;</code>水平居中</li>
+<li>子元素是块级元素, 设置了相对宽度或高度, 那就可以设置<code>margin</code>为百分值, 直接水平居中或垂直居中了</li>
+<li>子元素是内联元素, 可以在父元素上使用<code>text-align: center;</code>水平居中</li>
+</ul>
 </li>
-<li><p>在父元素宽或高和子元素不一样时, 就要使用居中布局的技巧了, 下面是居中思路</p>
-<p>居中思路:</p>
+<li>父元素是块级元素, 设置了绝对宽度或高度<ul>
+<li>子元素是块级元素, 设置了绝对宽度或高度, 可以直接计算并设置<code>margin</code>, 水平居中或垂直居中</li>
+</ul>
 </li>
-<li><p>flex布局(推荐)</p>
-</li>
-<li><p>使用transform(因为其百分值能代表自身长宽的百分比), 水平方向上<code>margin-left: 50%;</code>或绝对定位<code>left: 50%;</code>, 垂直方向上, 由于正常布局流下百分值按内联方向(参考CSS杂项第4条), 所以只有绝对定位<code>top: 50%</code>的方法. <strong>其实只要使子元素一角居中, 然后用transform位移半个身位即可</strong></p>
-</li>
-<li><p>绝对定位下, 设置子元素宽高, 以及top, left, bottom, right为0, <code>margin: auto</code>即可居中布置</p>
-</li>
-<li><p>用calc()函数计算长度, 原理类似利用transform. 还是那个问题, 如果想垂直居中, 需要绝对定位. 当然, 如果父元素和子元素的宽高都使用绝对大小, 那就直接可以写数值了. 如果子元素是百分值, 那也可以直接计算出来. 只有父元素没给出绝对大小且子元素给出了绝对大小, 才会用calc()函数</p>
+<li>除了这些, 还有普适的方法, 特别适合子元素是块级元素且未设置宽度高度的情况<ul>
+<li>flex布局(推荐)</li>
+<li>使用transform(因为其百分值能代表自身长宽的百分比), 水平方向上<code>margin-left: 50%;</code>或绝对定位<code>left: 50%;</code>, 垂直方向上, 由于正常布局流下百分值按内联方向(参考CSS杂项第4条), 所以只有绝对定位<code>top: 50%</code>的方法. <strong>其实只要使子元素一角居中, 然后用transform位移半个身位即可</strong></li>
+<li>绝对定位下, 设置子元素宽高, 以及top, left, bottom, right为0, <code>margin: auto</code>即可居中布置</li>
+</ul>
 </li>
 </ul>
 </li>

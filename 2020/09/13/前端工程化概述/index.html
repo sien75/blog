@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-09-15
+      更新于:&nbsp;2020-09-22
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -286,7 +286,7 @@
 </li>
 </ol>
 <h2 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h2><p>Webpack是一个自动化构建工具. 开发者使用了一套便于大型项目开发的体系, 但是这种体系是浏览器无法理解的, 这里面比如ES6, TypeScript, Sass, vue等, 这些浏览器无法理解的开发技术是为了更好地开发大型前端项目. Webpack就是担任这样一个角色: 把多个开发文件打包成浏览器可以理解的几个HTML, CSS, JavaScript和图片文件. 此外, Webpack还会自动地监听本地代码变化并重新构建, 并且做一些文件优化, 代码校验等.</p>
-<p>这里附加一个使用Vue的项目的简单配置:</p>
+<p>这里附加一个使用Vue的项目的简单配置, 参考了<a target="_blank" rel="noopener" href="https://webpack.wuhaolin.cn/">https://webpack.wuhaolin.cn/</a>:</p>
 <p>webpack.config.js</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry: <span class="string">&#x27;./main.js&#x27;</span>,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">&#x27;bundle.js&#x27;</span>,</span><br><span class="line">    path: path.resolve(__dirname, <span class="string">&#x27;./dist&#x27;</span>),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.vue$/</span>,</span><br><span class="line">        use: [<span class="string">&#x27;vue-loader&#x27;</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  devtool: <span class="string">&#x27;source-map&#x27;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -302,6 +302,11 @@
   <div class="mdui-divider"></div>
   
   <nav>
+    
+      <a rel="prev" class="post-nav-item mdui-float-left" href="/blog/2020/09/15/Vue%E5%9F%BA%E7%A1%80/">
+        <i class="iconfont icon-angle-left"></i>
+        <span>Vue基础</span>
+      </a>
     
     
       <a rel="next" class="post-nav-item mdui-float-right" href="/blog/2020/09/08/Node-js%E5%9F%BA%E7%A1%80/">
