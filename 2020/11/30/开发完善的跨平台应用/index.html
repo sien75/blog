@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-11-30
+      更新于:&nbsp;2020-12-20
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -343,7 +343,7 @@
 <h2 id="跨平台与性能之间冲突的折中办法"><a href="#跨平台与性能之间冲突的折中办法" class="headerlink" title="跨平台与性能之间冲突的折中办法"></a>跨平台与性能之间冲突的折中办法</h2><p>我们知道, 高级编程语言有编译型和解释型两个基本类型, 前者以C/C++为代表, 后者以python, JavaScript为代表. 编译型语言会将代码转换成平台特定的机器码来执行, 所以<strong>速度快</strong>, 但是如果想要跨平台, 就需要<strong>分别编译</strong>(如Qt), 或者干脆<strong>分别编写</strong>; 解释型语言会边解释边运行, 好处是是可以<strong>跨平台</strong>, 但是这样反复把高级语言解释成机器码的过程导致<strong>性能偏低</strong>.</p>
 <p>解释型语言执行效率低, 其原因在于每次都有解释过程. 由于平台不同, 所以不能事先解释. 那还有一个策略就是运行时优化, 把总是反复解释的代码片段记录下来, 下次用到的时候直接执行它的机器码, 省去解释过程, 这就是<code>JIT</code>技术. 在浏览器中, JIT技术碰到一个问题, 就是JavaScript的变量是无类型的, 导致上次的机器码可能不能重用, 而只能再次解释. 所以一个思路是把JavaScript改造成强类型语言, 这就是TypeScript.</p>
 <p>和JIT技术不同, 另一种思路是, 我们为什么不直接把预先编译好的字节码放到浏览器里执行? 这里的根本问题在于, 需要<strong>跨客观存在的不同硬件平台, 并且使程序高性能运行</strong>. 解释型语言跨平台能力强, 然而解释高级语言是需要成本的; 编译型语言开发程序性能较好, 但是需要多次编译成机器码才能适应多个平台. 在高级语言和机器码的两极上, 我们需要找到一个平衡点. 这个点要尽量接近底层的机器码, 以减少解释过程的时间, 尽量解决性能问题; 同时它还要统筹好不同平台的差异, 向上承载的语言必须是基本和平台无关的. 开发时使用高级语言(开发者喜欢的语言, 开发生态好的语言, 适合项目开发的语言)开发, 在解释运行环境下开发(实时调试), 部署时转换成这个中间代码, 提高程序运行性能.</p>
-<p><code>WebAssembly</code>就是按照这个思路来设计的, 我不去管弱类型的JavaScript, 而用C++这样的强类型语言开发, 通过编译器编译成wasm字节码, 在程序运行的时候wasm字节码会被解释成机器码, 并引入JIT机制进一步改善性能.</p>
+<p><code>WebAssembly</code>就是按照这个思路来设计的, 我不去管弱类型的JavaScript, 而用C++这样的强类型语言开发(原则上TypeScript也是可以的), 通过编译器编译成wasm字节码, 在程序运行的时候wasm字节码会被解释成机器码, 并引入JIT机制进一步改善性能.</p>
 <p>Web的成功和它的跨平台属性关系密切, 如果再解决其性能较原生应用偏低的问题, 那Web技术会再一次大放异彩, 更加擅长编写复杂软件. 抛开Web领域, JVM的设计也是遵循这个思路的, 即Java等高级语言编译成class虚拟机器码, 再由JIT虚拟机解释class虚拟机器码. 可以看到, 综合利用编译和解释的优点, 是在不同平台下保持便捷开发和程序高效运行的有效方法.</p>
 <p><img src="programming_language.svg" alt="编译型语言和解释型语言"></p>
 <h2 id="其他跨平台技术"><a href="#其他跨平台技术" class="headerlink" title="其他跨平台技术"></a>其他跨平台技术</h2><p>以上只是针对由前端技术领域(HTML+CSS+JavaScript)制作图形界面软件的跨平台技术, 此外, 使用其他语言, 开发软件(图形&amp;命令行)的主流跨平台技术, 主要有以下这些. </p>
@@ -351,7 +351,7 @@
 <p>Dart语言的Flutter技术, 我感觉和Qt在机理上是差不多的, 但是它是跨iOS/Android/Web平台的. Dart是编译型语言, 但是应用于Web平台时是把Dart翻译成JavaScript, 以解释型语言运行的.</p>
 <p>再来看一下Java, Java是解释型语言, 当然更确切的说法是Java是(混合编译的)解释型语言, class字节码是Java语言的中间代码, 运行于JVM上. 和Qt不同, JVM在不同操作系统上向上暴露的接口是基本相同的, 而Java转换成的class字节码在运行时还是需要根据平台的不同而解释运行的.</p>
 <p>Python也是一种(混合编译的)解释型语言, 和Java的思路是一样的, Python转换成的字节码主要有两种, 一种运行在PVM上, 一种可以运行在JVM上.</p>
-<p>nodejs上运行的JavaScript并没有字节码的概念, 是(纯)解释型语言, 不过为了提高性能, 也是需要像WebAssembly这样的中间代码机制引入的.</p>
+<p>nodejs上运行的JavaScript并没有字节码的概念, 是(纯)解释型语言, 不过为了提高性能, 是可以直接调用exe文件的.</p>
 
   </div>
   <!--文末结束语-->
@@ -363,6 +363,11 @@
   <div class="mdui-divider"></div>
   
   <nav>
+    
+      <a rel="prev" class="post-nav-item mdui-float-left" href="/blog/2021/01/04/MusicMaker%E7%BC%96%E5%86%99%E8%AE%B0%E5%BD%951-Webpack%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/">
+        <i class="iconfont icon-angle-left"></i>
+        <span>MusicMaker编写记录1-Webpack配置与项目搭建</span>
+      </a>
     
     
       <a rel="next" class="post-nav-item mdui-float-right" href="/blog/2020/09/15/Vue%E5%9F%BA%E7%A1%80/">
@@ -394,7 +399,7 @@
     <div class="mdui-row">
       
       <span>
-        &copy; 2019 - 2020 
+        &copy; 2019 - 2021 
         
           <span style="color:#d9333f" class="iconfont icon-heart"></span>
         

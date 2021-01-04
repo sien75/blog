@@ -689,6 +689,90 @@
       </tags>
   </entry>
   <entry>
+    <title>HTTP基础</title>
+    <url>/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>本文为阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN文档中的HTTP部分</a>以及其他相关资料的笔记, 记录下了我认为关于HTTP的有价值的基础内容, 仅作为参考, 并不是教程类文章.</p>
+<a id="more"></a>
+
+<h2 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h2><p><em>本文参考了<a href="https://www.cnblogs.com/chenqf/p/6386163.html">https://www.cnblogs.com/chenqf/p/6386163.html</a>, 这篇文章写的非常棒!</em></p>
+<ol>
+<li><p>缓存分为<strong>强制缓存</strong>和<strong>对比缓存</strong>.</p>
+<ul>
+<li>强制缓存如果生效, 那么就不需要向服务器发送请求, 直接使用缓存内容</li>
+<li>对比缓存机制下总是会向服务器发送请求, 服务器会进行验证, 并决定返回内容</li>
+<li>强制缓存优先级高于对比缓存, 强制缓存不生效时再使用对比缓存规则</li>
+</ul>
+</li>
+<li><p><code>强制缓存</code>是通过时间来验证缓存内容是否过期的. HTTP1.0时期的<code>Expires</code>字段, 已被HTTP1.1时期的<code>Cache-Control</code>替代. 在第一次请求服务器时, 服务器响应头会通过<code>Cache-Control</code>来告知客户端缓存策略. <code>Cache-Control</code>字段主要有以下取值:</p>
+<ul>
+<li>max-age=n, 表示采用强制缓存, 且有效时间为n秒</li>
+<li>no-cache, 使用对比缓存</li>
+<li>no-store, 不缓存</li>
+</ul>
+</li>
+<li><p><code>对比缓存</code>有以下两种方式来验证缓存内容是否过期:</p>
+<ul>
+<li><code>If-Modified-Since</code>, 客户端在请求头中带上上一次在服务器返回内容时<code>Last-Modified</code>的字段内容, 服务器验证在此时间之后内容是否有修改, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
+<li><code>If-None-Match</code>, 客户端在请求头中带上上一次服务器返回内容时<code>Etag</code>的字段内容, 这是由服务器生成的对资源的唯一标识, 服务器使用这一标识验证相应内容是否有新版本, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
+</ul>
+</li>
+<li><p>总的来说, 优先级上<code>强制缓存</code> &gt; <code>If-None-Match/Etag</code> &gt; <code>If-Modified-Since/Last-Modified</code>.</p>
+<ul>
+<li>如果存在强制缓存设置且生效, 则直接在缓存中获得内容, 不向服务器发送请求</li>
+<li>如果强制缓存未设置或失效, 则使用对比缓存, 上一次服务器返回的HTTP头中若有<code>Etag</code>字段则用<code>If-None-Match/Etag</code>, 否则若有<code>Last-Modified</code>则用<code>If-Modified-Since/Last-Modified</code></li>
+<li>如果未设置缓存机制, 则正常请求服务器内容</li>
+</ul>
+</li>
+</ol>
+<h2 id="HTTP-Cookie"><a href="#HTTP-Cookie" class="headerlink" title="HTTP Cookie"></a>HTTP Cookie</h2><p>Cookie主要用于会话管理, 个性化设置和浏览器行为跟踪, 由于Cookie有大小限制, 且浏览器每次请求都会带上Cookie数据造成额外开销, 所以Cookie已经不适合用作存储数据.</p>
+<p>服务端设置Cookie:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set-Cookie: id&#x3D;a3fWa; Expires&#x3D;Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly; Domain&#x3D;baidu.com; Path&#x3D;&#x2F;search; SameSite&#x3D;None</span><br></pre></td></tr></table></figure>
+<p>其中:</p>
+<ul>
+<li>未指定过期时间<code>Expires</code>则为会话Cookie, 窗口关闭自动删除; 设置了<code>Expires</code>是按照客户端的时间来计算的</li>
+<li><code>Secure</code>标识是指该Cookie仅能在HTTPS请求中发送给服务端</li>
+<li><code>HttpOnly</code>标识是指该Cookie无法通过<code>document.cookie</code>访问到, 可有效防止XSS攻击</li>
+<li><code>Domain</code>标识指定后所有子域名都可以使用这一Cookie, 默认情况下不同子域名间是不能互相访问Cookie的</li>
+<li><code>Path</code>标识设置后所有<code>/search</code>目录下的所有路径都会访问到Cookie值</li>
+<li><code>SameSite=Lax</code>为浏览器默认值, 意思是跨域请求不带上该Cookie, 可有效防止CSRF攻击, 设为<code>None</code>则取消该限制</li>
+</ul>
+<h2 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h2><p>CORS(Cross-Origin Resource Sharing)跨域资源共享, 是一种机制, 使用额外的HTTP头来告诉浏览器和服务器, 控制跨域的HTTP请求.</p>
+<ol>
+<li><p>场景1: 简单请求. 所谓简单请求, 是指使用<code>GET</code> <code>POST</code> <code>HEAD</code>, 且只包含被允许的HTTP头, <code>Content-Type</code>只能是指定值的请求. 浏览器在请求时会带上如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br></pre></td></tr></table></figure>
+<p> 服务器核实这个域是否被允许, 如允许, 则返回内容中带有如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *(或https:&#x2F;&#x2F;source.com)</span><br></pre></td></tr></table></figure>
+<p> 如果不允许, 返回内容中是不包含这个HTTP头的, 并在浏览器中触发错误.</p>
+</li>
+<li><p>场景2: 复杂请求. 不满足简单请求的都是复杂请求, 浏览器会预先使用OPTION方法发送一个预检请求, 询问服务器是否允许:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Request_method: PUT</span><br><span class="line">Access-Control-Headers: My-Header</span><br></pre></td></tr></table></figure>
+<p> 如果服务器允许, 就会带上以下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT</span><br><span class="line">Access-Control-Allow-Headers: My-Header</span><br><span class="line">Access-Control-Max-Age: 86400</span><br></pre></td></tr></table></figure>
+<p> 其中<code>Access-Control-Max-Age: 86400</code>意思是在24小时之内不必为同样的请求再次发送预检请求.</p>
+</li>
+<li><p>场景3: 附带Cookie的请求. 当然, 要想跨域附带Cookie, 首先需要设置好<code>目标网站https://destination.com</code>Cookie的<code>SameSite: None</code>, 允许跨域请求带Cookie. 对于XHR请求来说, 附带Cookie的操作如下:</p>
+ <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">&#x27;GET&#x27;</span>, url, <span class="literal">true</span>);</span><br><span class="line">xhr.withCredentials = <span class="literal">true</span>;</span><br><span class="line"><span class="comment">//other codes</span></span><br></pre></td></tr></table></figure>
+<p> 这样请求中就会带上Cookie, 如果服务器允许, 则返回的请求中就会多出如下HTTP头:</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: true</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="常见的HTTP响应代码"><a href="#常见的HTTP响应代码" class="headerlink" title="常见的HTTP响应代码"></a>常见的HTTP响应代码</h2><ul>
+<li><code>200 OK</code>, 请求成功</li>
+<li><code>301 Moved Permanently</code>, 请求的资源已被永久移至新位置</li>
+<li><code>304 Not Modified</code>, 请求的资源没有更改</li>
+<li><code>404 Not Found</code>, 请求的资源未发现</li>
+<li><code>501 Not Implemented</code>, 服务器不支持此请求方法</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web前端基础</category>
+      </categories>
+      <tags>
+        <tag>HTTP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HTML和CSS基础</title>
     <url>/blog/2020/08/23/HTML%E5%92%8CCSS%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p>本文包含了部分HTML, CSS的内容, 是阅读<a href="https://developer.mozilla.org/zh-CN/">MDN中文文档</a>的HTML和CSS部分, 以及<a href="https://www.sass.hk/guide/">Sass快速入门</a>做下的笔记, 不是教程, 不以总结全面为目标, 仅仅是记录下自己觉得有价值的点, 作为参考.</p>
@@ -1044,90 +1128,6 @@
       <tags>
         <tag>HTML</tag>
         <tag>CSS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HTTP基础</title>
-    <url>/blog/2020/08/24/HTTP%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p>本文为阅读<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN文档中的HTTP部分</a>以及其他相关资料的笔记, 记录下了我认为关于HTTP的有价值的基础内容, 仅作为参考, 并不是教程类文章.</p>
-<a id="more"></a>
-
-<h2 id="HTTP缓存"><a href="#HTTP缓存" class="headerlink" title="HTTP缓存"></a>HTTP缓存</h2><p><em>本文参考了<a href="https://www.cnblogs.com/chenqf/p/6386163.html">https://www.cnblogs.com/chenqf/p/6386163.html</a>, 这篇文章写的非常棒!</em></p>
-<ol>
-<li><p>缓存分为<strong>强制缓存</strong>和<strong>对比缓存</strong>.</p>
-<ul>
-<li>强制缓存如果生效, 那么就不需要向服务器发送请求, 直接使用缓存内容</li>
-<li>对比缓存机制下总是会向服务器发送请求, 服务器会进行验证, 并决定返回内容</li>
-<li>强制缓存优先级高于对比缓存, 强制缓存不生效时再使用对比缓存规则</li>
-</ul>
-</li>
-<li><p><code>强制缓存</code>是通过时间来验证缓存内容是否过期的. HTTP1.0时期的<code>Expires</code>字段, 已被HTTP1.1时期的<code>Cache-Control</code>替代. 在第一次请求服务器时, 服务器响应头会通过<code>Cache-Control</code>来告知客户端缓存策略. <code>Cache-Control</code>字段主要有以下取值:</p>
-<ul>
-<li>max-age=n, 表示采用强制缓存, 且有效时间为n秒</li>
-<li>no-cache, 使用对比缓存</li>
-<li>no-store, 不缓存</li>
-</ul>
-</li>
-<li><p><code>对比缓存</code>有以下两种方式来验证缓存内容是否过期:</p>
-<ul>
-<li><code>If-Modified-Since</code>, 客户端在请求头中带上上一次在服务器返回内容时<code>Last-Modified</code>的字段内容, 服务器验证在此时间之后内容是否有修改, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
-<li><code>If-None-Match</code>, 客户端在请求头中带上上一次服务器返回内容时<code>Etag</code>的字段内容, 这是由服务器生成的对资源的唯一标识, 服务器使用这一标识验证相应内容是否有新版本, 如有则返回新内容(200 OK), 如无则返回304 Not Modified</li>
-</ul>
-</li>
-<li><p>总的来说, 优先级上<code>强制缓存</code> &gt; <code>If-None-Match/Etag</code> &gt; <code>If-Modified-Since/Last-Modified</code>.</p>
-<ul>
-<li>如果存在强制缓存设置且生效, 则直接在缓存中获得内容, 不向服务器发送请求</li>
-<li>如果强制缓存未设置或失效, 则使用对比缓存, 上一次服务器返回的HTTP头中若有<code>Etag</code>字段则用<code>If-None-Match/Etag</code>, 否则若有<code>Last-Modified</code>则用<code>If-Modified-Since/Last-Modified</code></li>
-<li>如果未设置缓存机制, 则正常请求服务器内容</li>
-</ul>
-</li>
-</ol>
-<h2 id="HTTP-Cookie"><a href="#HTTP-Cookie" class="headerlink" title="HTTP Cookie"></a>HTTP Cookie</h2><p>Cookie主要用于会话管理, 个性化设置和浏览器行为跟踪, 由于Cookie有大小限制, 且浏览器每次请求都会带上Cookie数据造成额外开销, 所以Cookie已经不适合用作存储数据.</p>
-<p>服务端设置Cookie:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set-Cookie: id&#x3D;a3fWa; Expires&#x3D;Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly; Domain&#x3D;baidu.com; Path&#x3D;&#x2F;search; SameSite&#x3D;None</span><br></pre></td></tr></table></figure>
-<p>其中:</p>
-<ul>
-<li>未指定过期时间<code>Expires</code>则为会话Cookie, 窗口关闭自动删除; 设置了<code>Expires</code>是按照客户端的时间来计算的</li>
-<li><code>Secure</code>标识是指该Cookie仅能在HTTPS请求中发送给服务端</li>
-<li><code>HttpOnly</code>标识是指该Cookie无法通过<code>document.cookie</code>访问到, 可有效防止XSS攻击</li>
-<li><code>Domain</code>标识指定后所有子域名都可以使用这一Cookie, 默认情况下不同子域名间是不能互相访问Cookie的</li>
-<li><code>Path</code>标识设置后所有<code>/search</code>目录下的所有路径都会访问到Cookie值</li>
-<li><code>SameSite=Lax</code>为浏览器默认值, 意思是跨域请求不带上该Cookie, 可有效防止CSRF攻击, 设为<code>None</code>则取消该限制</li>
-</ul>
-<h2 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h2><p>CORS(Cross-Origin Resource Sharing)跨域资源共享, 是一种机制, 使用额外的HTTP头来告诉浏览器和服务器, 控制跨域的HTTP请求.</p>
-<ol>
-<li><p>场景1: 简单请求. 所谓简单请求, 是指使用<code>GET</code> <code>POST</code> <code>HEAD</code>, 且只包含被允许的HTTP头, <code>Content-Type</code>只能是指定值的请求. 浏览器在请求时会带上如下HTTP头:</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br></pre></td></tr></table></figure>
-<p> 服务器核实这个域是否被允许, 如允许, 则返回内容中带有如下HTTP头:</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: *(或https:&#x2F;&#x2F;source.com)</span><br></pre></td></tr></table></figure>
-<p> 如果不允许, 返回内容中是不包含这个HTTP头的, 并在浏览器中触发错误.</p>
-</li>
-<li><p>场景2: 复杂请求. 不满足简单请求的都是复杂请求, 浏览器会预先使用OPTION方法发送一个预检请求, 询问服务器是否允许:</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Origin: https:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Request_method: PUT</span><br><span class="line">Access-Control-Headers: My-Header</span><br></pre></td></tr></table></figure>
-<p> 如果服务器允许, 就会带上以下HTTP头:</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Origin: http:&#x2F;&#x2F;source.com</span><br><span class="line">Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT</span><br><span class="line">Access-Control-Allow-Headers: My-Header</span><br><span class="line">Access-Control-Max-Age: 86400</span><br></pre></td></tr></table></figure>
-<p> 其中<code>Access-Control-Max-Age: 86400</code>意思是在24小时之内不必为同样的请求再次发送预检请求.</p>
-</li>
-<li><p>场景3: 附带Cookie的请求. 当然, 要想跨域附带Cookie, 首先需要设置好<code>目标网站https://destination.com</code>Cookie的<code>SameSite: None</code>, 允许跨域请求带Cookie. 对于XHR请求来说, 附带Cookie的操作如下:</p>
- <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">&#x27;GET&#x27;</span>, url, <span class="literal">true</span>);</span><br><span class="line">xhr.withCredentials = <span class="literal">true</span>;</span><br><span class="line"><span class="comment">//other codes</span></span><br></pre></td></tr></table></figure>
-<p> 这样请求中就会带上Cookie, 如果服务器允许, 则返回的请求中就会多出如下HTTP头:</p>
- <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Access-Control-Allow-Credentials: true</span><br></pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="常见的HTTP响应代码"><a href="#常见的HTTP响应代码" class="headerlink" title="常见的HTTP响应代码"></a>常见的HTTP响应代码</h2><ul>
-<li><code>200 OK</code>, 请求成功</li>
-<li><code>301 Moved Permanently</code>, 请求的资源已被永久移至新位置</li>
-<li><code>304 Not Modified</code>, 请求的资源没有更改</li>
-<li><code>404 Not Found</code>, 请求的资源未发现</li>
-<li><code>501 Not Implemented</code>, 服务器不支持此请求方法</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Web前端基础</category>
-      </categories>
-      <tags>
-        <tag>HTTP</tag>
       </tags>
   </entry>
   <entry>
@@ -1705,7 +1705,7 @@
 <h2 id="跨平台与性能之间冲突的折中办法"><a href="#跨平台与性能之间冲突的折中办法" class="headerlink" title="跨平台与性能之间冲突的折中办法"></a>跨平台与性能之间冲突的折中办法</h2><p>我们知道, 高级编程语言有编译型和解释型两个基本类型, 前者以C/C++为代表, 后者以python, JavaScript为代表. 编译型语言会将代码转换成平台特定的机器码来执行, 所以<strong>速度快</strong>, 但是如果想要跨平台, 就需要<strong>分别编译</strong>(如Qt), 或者干脆<strong>分别编写</strong>; 解释型语言会边解释边运行, 好处是是可以<strong>跨平台</strong>, 但是这样反复把高级语言解释成机器码的过程导致<strong>性能偏低</strong>.</p>
 <p>解释型语言执行效率低, 其原因在于每次都有解释过程. 由于平台不同, 所以不能事先解释. 那还有一个策略就是运行时优化, 把总是反复解释的代码片段记录下来, 下次用到的时候直接执行它的机器码, 省去解释过程, 这就是<code>JIT</code>技术. 在浏览器中, JIT技术碰到一个问题, 就是JavaScript的变量是无类型的, 导致上次的机器码可能不能重用, 而只能再次解释. 所以一个思路是把JavaScript改造成强类型语言, 这就是TypeScript.</p>
 <p>和JIT技术不同, 另一种思路是, 我们为什么不直接把预先编译好的字节码放到浏览器里执行? 这里的根本问题在于, 需要<strong>跨客观存在的不同硬件平台, 并且使程序高性能运行</strong>. 解释型语言跨平台能力强, 然而解释高级语言是需要成本的; 编译型语言开发程序性能较好, 但是需要多次编译成机器码才能适应多个平台. 在高级语言和机器码的两极上, 我们需要找到一个平衡点. 这个点要尽量接近底层的机器码, 以减少解释过程的时间, 尽量解决性能问题; 同时它还要统筹好不同平台的差异, 向上承载的语言必须是基本和平台无关的. 开发时使用高级语言(开发者喜欢的语言, 开发生态好的语言, 适合项目开发的语言)开发, 在解释运行环境下开发(实时调试), 部署时转换成这个中间代码, 提高程序运行性能.</p>
-<p><code>WebAssembly</code>就是按照这个思路来设计的, 我不去管弱类型的JavaScript, 而用C++这样的强类型语言开发, 通过编译器编译成wasm字节码, 在程序运行的时候wasm字节码会被解释成机器码, 并引入JIT机制进一步改善性能.</p>
+<p><code>WebAssembly</code>就是按照这个思路来设计的, 我不去管弱类型的JavaScript, 而用C++这样的强类型语言开发(原则上TypeScript也是可以的), 通过编译器编译成wasm字节码, 在程序运行的时候wasm字节码会被解释成机器码, 并引入JIT机制进一步改善性能.</p>
 <p>Web的成功和它的跨平台属性关系密切, 如果再解决其性能较原生应用偏低的问题, 那Web技术会再一次大放异彩, 更加擅长编写复杂软件. 抛开Web领域, JVM的设计也是遵循这个思路的, 即Java等高级语言编译成class虚拟机器码, 再由JIT虚拟机解释class虚拟机器码. 可以看到, 综合利用编译和解释的优点, 是在不同平台下保持便捷开发和程序高效运行的有效方法.</p>
 <p><img src="programming_language.svg" alt="编译型语言和解释型语言"></p>
 <h2 id="其他跨平台技术"><a href="#其他跨平台技术" class="headerlink" title="其他跨平台技术"></a>其他跨平台技术</h2><p>以上只是针对由前端技术领域(HTML+CSS+JavaScript)制作图形界面软件的跨平台技术, 此外, 使用其他语言, 开发软件(图形&amp;命令行)的主流跨平台技术, 主要有以下这些. </p>
@@ -1713,7 +1713,7 @@
 <p>Dart语言的Flutter技术, 我感觉和Qt在机理上是差不多的, 但是它是跨iOS/Android/Web平台的. Dart是编译型语言, 但是应用于Web平台时是把Dart翻译成JavaScript, 以解释型语言运行的.</p>
 <p>再来看一下Java, Java是解释型语言, 当然更确切的说法是Java是(混合编译的)解释型语言, class字节码是Java语言的中间代码, 运行于JVM上. 和Qt不同, JVM在不同操作系统上向上暴露的接口是基本相同的, 而Java转换成的class字节码在运行时还是需要根据平台的不同而解释运行的.</p>
 <p>Python也是一种(混合编译的)解释型语言, 和Java的思路是一样的, Python转换成的字节码主要有两种, 一种运行在PVM上, 一种可以运行在JVM上.</p>
-<p>nodejs上运行的JavaScript并没有字节码的概念, 是(纯)解释型语言, 不过为了提高性能, 也是需要像WebAssembly这样的中间代码机制引入的.</p>
+<p>nodejs上运行的JavaScript并没有字节码的概念, 是(纯)解释型语言, 不过为了提高性能, 是可以直接调用exe文件的.</p>
 ]]></content>
       <categories>
         <category>技术漫谈</category>
@@ -1722,6 +1722,151 @@
         <tag>跨平台</tag>
         <tag>Electron</tag>
         <tag>React Native</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MusicMaker编写记录1-Webpack配置与项目搭建</title>
+    <url>/blog/2021/01/04/MusicMaker%E7%BC%96%E5%86%99%E8%AE%B0%E5%BD%951-Webpack%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p>MusicMaker是我打算做的一个可以<strong>音乐展示</strong>, <strong>即时演奏</strong>和<strong>简单编曲</strong>的软件, 这是我记录编写过程的文章.</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="MusicMaker简介"><a href="#MusicMaker简介" class="headerlink" title="MusicMaker简介"></a>MusicMaker简介</h2><p>MusicMaker是我打算做的一个可以<strong>音乐展示</strong>, <strong>即时演奏</strong>和<strong>简单编曲</strong>的软件, 打算使用Web前端技术做, 跨Web和所有Native端. 做这个项目的目的有两个, 一个是为了实现自己的这个想法, 另一个是练习Web前端技术. 而且这种自己从头规划, 慢慢制作是很有成就感的!</p>
+<p>自己玩的项目, 不好说啥时候更新, 大家看个乐就行了.</p>
+<p><strong>项目地址: <a href="https://github.com/sien75/musicmaker">https://github.com/sien75/musicmaker</a></strong></p>
+<p><strong>本次commit版本: <a href="https://github.com/sien75/musicmaker/tree/7d6d162c407fc87a386fa6d4d4189c6ea2367150">https://github.com/sien75/musicmaker/tree/7d6d162c407fc87a386fa6d4d4189c6ea2367150</a></strong></p>
+<p><strong>Docs: <a href="https://sien75.github.io/musicmaker">https://sien75.github.io/musicmaker</a></strong></p>
+<hr>
+<h2 id="项目设想"><a href="#项目设想" class="headerlink" title="项目设想"></a>项目设想</h2><p>之前第一版的MusicMaker分为两个部分: LivePlay和Arranger. LivePlay部分是一个键盘乐器, 可以即时演奏, 算是基本完成的. Arranger部分嘛…, 我是想做一个编曲+展示的页面. 想做的功能挺多的, 但是做到的只是个半成品.</p>
+<p><img src="./musicmaker_v1.png" alt="MusicMaker"></p>
+<p>第一版使用的技术是最基础的HTML+CSS+JavaScript, 搁置了很久, 但是我是一直想把这个东西做下去的. 两年过去了, 我现在已经接触到了更多的前端技术, 所以我打算另起炉灶, 用新技术重新构思, 做第二版!</p>
+<p>这次我带来了几个超强的武器: Webpack, React, TypeScript. 项目搭建伊始要规划的事很多, 但主要工作就是把Webpack配置好. 在Webpack的配置过程中, 就能把项目的基本要素都串起来.</p>
+<p>不过一切的开始, 应该是 – 新建一个文件夹:</p>
+<p><img src="./new_folder.png" alt="新建文件夹"></p>
+<p>当然, 由于我是从Github上直接拉下来的项目, 所以是有git版本控制的. 我把项目中的文件和文件夹放到另一个分支备份, 然后把master分支清空了.</p>
+<p>如果是对于一个没有git的空文件夹, 那么第一步无疑是执行以下命令:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+<p>在有了git的版本控制后, 我们接下来要干什么呢? 没错, 接下来要进行npm初始化, 生成<code>package.json</code>文件, 这个文件是node项目的核心文件:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
+<p>这样一个node项目就初始化完成了! 接下来进行目录规划:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|- musicmaker</span><br><span class="line">    |- build</span><br><span class="line">        |- lib</span><br><span class="line">            |- ...</span><br><span class="line">        |- doc</span><br><span class="line">            |- ...</span><br><span class="line">    |- src</span><br><span class="line">        |- ...</span><br><span class="line">    |- examples</span><br><span class="line">        |- ...</span><br><span class="line">    |- public</span><br><span class="line">        |- ...</span><br><span class="line">    |- package.json</span><br><span class="line">    |- .gitignore</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>src</code>, 目录下是MusicMaker的库原始代码, 这一部分是Musicmaker的核心功能部分</li>
+<li><code>examples</code>, 目录下是对MusicMaker库的使用, 也就是说这一部分是用于向其他人介绍使用方法, 并展示效果的</li>
+<li><code>build/lib</code>, 目录下是生成的库文件</li>
+<li><code>build/doc</code>, 目录下是构建好的<code>examples</code>页面(即Docs页), 这一部分会直接部署到项目的GitHub Page上</li>
+</ul>
+<hr>
+<h2 id="如何构建"><a href="#如何构建" class="headerlink" title="如何构建"></a>如何构建</h2><p>一个项目的基础骨架搭建好了, 接下来就是注入灵魂的时候了:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D webpack webpack-cli webpack-dev-server</span><br></pre></td></tr></table></figure>
+
+<p>我打算使用Webpack构建Docs页, 并用Webpack构建既可以使用<code>&lt;script&gt;</code>标签引入, 也可以使用<code>import</code>引入的MusicMaker库.</p>
+<p>但是使用MusicMaker库依赖React, 直接在<code>&lt;script&gt;</code>标签里写JSX, 不是一件明智的行为. 所以我取消了库可以用<code>&lt;script&gt;</code>标签引入的打算.</p>
+<p>我一开始也打算用Webpack构建MusicMaker库, 但是Webpack会把一个entry打包成一个文件输出, 无法保持原目录结构, 也无法生成.d.ts文件, 所以构建库需要另选工具.</p>
+<p>使用Typescript的命令行工具<code>tsc</code>可以直接生成<code>.d.ts</code>文件, 所以这是一个构建库的不错的工具. 对于库来说CSS和JavaScript的构建是两条生产线, 我使用<code>sass</code>命令行工具来实现<code>.scss</code>文件的编译.</p>
+<p><code>package.json</code>内容如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;start&quot;</span>: <span class="string">&quot;webpack serve --config webpack/config.doc.dev.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot;webpack --config webpack/config.doc.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build:lib&quot;</span>: <span class="string">&quot;rm -rf build/lib/* &amp;&amp; tsc --project tsconfig.lib.json &amp;&amp; sass src:build/lib --no-source-map&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Webpack的主要功能有两个: A – “开发”到”发布”的转换, B – 实时观察”开发”的效果. 在这里面, <code>start</code>是使用的B功能, <code>build</code>是使用的A功能.</p>
+<p><code>start</code>是会以<code>examples</code>文件夹的文件为入口, 而<code>examples</code>内的文件会依赖<code>src</code>内的核心库文件. 这个是用于实时开发, 观察Docs页的效果. 当然我也会借用此来调试MusicMaker库.</p>
+<p><code>build</code>就是构建Docs页, <code>start</code>是即时开发, 而<code>build</code>则是输出构建好的文件, 构建好的页面会直接部署到Github Page上. 和<code>start</code>一样, <code>build</code>会以<code>examples</code>文件夹的文件为入口, 而<code>examples</code>内的文件会依赖<code>src</code>内的核心库文件.</p>
+<p><code>build:lib</code>是构建MusicMaker库的命令, 这个命令都会以<code>src</code>目录下的文件为入口, 涉及<code>src</code>目录下的文件, 但不会涉及<code>examples</code>下的文件. 这里3个命令作用为:</p>
+<ul>
+<li><code>rm -rf build/lib/*</code>, 删除原有的库文件</li>
+<li><code>tsc --project tsconfig.lib.json</code>, 使用<code>tsc</code>编译<code>.tsx</code>生成<code>.js</code>和<code>.d.ts</code>文件</li>
+<li><code>sass src:build/lib</code>, 使用<code>sass</code>编译<code>.scss</code>生成<code>.css</code></li>
+</ul>
+<p>项目的Webpack配置文件都会放在<code>webpack</code>文件夹内, <code>entries.js</code>, <code>plugins.js</code>和<code>loaders.js</code>这3个基本的配置文件, 是会被各<code>config.xxx.js</code>依赖的.</p>
+<p>项目使用Babel来配合Webpack编译<code>.tsx</code>文件, Babel配置文件为项目根目录下的<code>.babelrc</code>文件.</p>
+<p>项目的TypeScript配置文件为<code>tsconfig.json</code>, 不过这个只是用于智能提醒编辑器的, 真正的<code>tsc</code>编译时使用的配置文件是<code>tsconfig.lib.json</code>.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">上述提及的配置文件位置如下:</span><br><span class="line">|- musicmaker</span><br><span class="line">    |- ...</span><br><span class="line">    |- webpack</span><br><span class="line">        |- entries.js</span><br><span class="line">        |- plugins.js</span><br><span class="line">        |- loaders.js</span><br><span class="line">        |- config.doc.dev.js</span><br><span class="line">        |- config.doc.js</span><br><span class="line">        |- config.lib.js</span><br><span class="line">    |- package.json</span><br><span class="line">    |- .babelrc</span><br><span class="line">    |- tsconfig.json</span><br><span class="line">    |- tsconfig.lib.json</span><br></pre></td></tr></table></figure>
+
+<p>接下来我会详细描述项目的各个配置项.</p>
+<hr>
+<h2 id="Webpack配置-entries-js"><a href="#Webpack配置-entries-js" class="headerlink" title="Webpack配置 - entries.js"></a>Webpack配置 - entries.js</h2><p>先从Webpack的配置说起吧.</p>
+<p>首先看<code>entries.js</code>, 我会把所有的<code>entry</code>和<code>output</code>以及<code>resolve</code>写在这里. 基本内容如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// entries.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.resolve(__dirname, <span class="string">&#x27;../examples/index.tsx&#x27;</span>),</span><br><span class="line">    output: &#123;</span><br><span class="line">        filename: <span class="string">&#x27;[name].js&#x27;</span>,</span><br><span class="line">        path: path.resolve(__dirname, <span class="string">&#x27;../build/doc&#x27;</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">        extensions: [<span class="string">&#x27;.tsx&#x27;</span>, <span class="string">&#x27;.ts&#x27;</span>, <span class="string">&#x27;.jsx&#x27;</span>, <span class="string">&#x27;.js&#x27;</span>],</span><br><span class="line">        alias: &#123;</span><br><span class="line">            musicmaker: path.resolve(__dirname, <span class="string">&#x27;../src&#x27;</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>当然Docs页是个多页面情况, 肯定不止一个entry, 以后会动态添加的. 设置别名<code>musicmaker</code>是为了在引入MusicMaker库的时候更方便, 更接近使用场景:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;musicmaker&#x27;</span>;</span><br><span class="line"><span class="comment">// 不设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../musicmaker&#x27;</span>;</span><br><span class="line">impoer MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../../../musicmaker&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Webpack配置-plugins-js"><a href="#Webpack配置-plugins-js" class="headerlink" title="Webpack配置 - plugins.js"></a>Webpack配置 - plugins.js</h2><p>我会把所有<code>plugins</code>和<code>optimization</code>的配置放在这里.</p>
+<p>项目需要安装4个插件: html-webpack-plugin, clean-webpack-plugin, mini-css-extract-plugin和css-minimizer-webpack-plugin, 首先安装它们:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D html-webpack-plugin@next clean-webpack-plugin mini-css-extract-plugin css-minimizer-webpack-plugin</span><br></pre></td></tr></table></figure>
+
+<h3 id="HTML模板插件和清空输出文件夹插件"><a href="#HTML模板插件和清空输出文件夹插件" class="headerlink" title="HTML模板插件和清空输出文件夹插件"></a>HTML模板插件和清空输出文件夹插件</h3><p>先看一下前两个插件, <code>plugins.js</code>文件包含以下代码:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// plugins.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> cwp = <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;clean-webpack-plugin&#x27;</span>).CleanWebpackPlugin)();</span><br><span class="line"><span class="keyword">const</span> hwp = <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>))(&#123;</span><br><span class="line">    title: <span class="string">&#x27;MusicMaker&#x27;</span>,</span><br><span class="line">    favicon: path.resolve(__dirname, <span class="string">&#x27;../public/favicon.ico&#x27;</span>),</span><br><span class="line">    template: path.resolve(__dirname, <span class="string">&#x27;../public/index.html&#x27;</span>),</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> plugins = [cwp, hwp];</span><br></pre></td></tr></table></figure>
+
+<p>CleanWebpackPlugin是用来在清除旧的构建文件的, 而HtmlWebpackPlugin是创建主html文件的.</p>
+<h3 id="JavaScript代码分离"><a href="#JavaScript代码分离" class="headerlink" title="JavaScript代码分离"></a>JavaScript代码分离</h3><p>代码分离是Webpack的一个很有用的功能. 试想一下, 两个entry共用一个依赖库, 然后把依赖库各自打包到自己的bundle文件里. 这种代码重复的情况, 造成了打包体积过大, 浪费存储和网络资源, 且很不优雅.</p>
+<p>我们在这里用到了<code>SplitChunksPlugin</code>这个插件(无需额外安装), 这个插件可以把共用的依赖库提取出来, 使一份代码仅被打包一次, 避免JavaScript代码重复. 在<code>plugins.js</code>里新加入下面的代码:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// plugins.js</span></span><br><span class="line"><span class="keyword">const</span> optimization = &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        chunks: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="CSS代码分离"><a href="#CSS代码分离" class="headerlink" title="CSS代码分离"></a>CSS代码分离</h3><p>同样的, 项目也需要对CSS代码进行分离操作. 对CSS代码分离需要修改<code>plugins</code>和<code>loader</code>两部分, 出于速度方面的考虑, 仅在生产模式启用这一功能:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// plugins.js</span></span><br><span class="line"><span class="keyword">const</span> devMode = process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> mcepFun = <span class="function">() =&gt;</span> <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;mini-css-extract-plugin&#x27;</span>))(&#123;&#125;);</span><br><span class="line"><span class="keyword">const</span> plugins = devMode ? [cwp, hwp] : [cwp, hwp, mcepFun()];</span><br></pre></td></tr></table></figure>
+
+<h3 id="代码压缩"><a href="#代码压缩" class="headerlink" title="代码压缩"></a>代码压缩</h3><p>Webpack5会对生产模式下输出的JavaScript代码进行压缩, 这里需要配置的是CSS的代码压缩. 这里使用到的插件是<code>css-minimizer-webpack-plugin</code>, 修改<code>plugins.js</code>代码如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// plugins.js</span></span><br><span class="line"><span class="keyword">const</span> devMode = process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> cmwpFun = <span class="function">() =&gt;</span> <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;css-minimizer-webpack-plugin&#x27;</span>))();</span><br><span class="line"><span class="keyword">const</span> optimization = &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        chunks: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    minimizer: devMode ? [<span class="string">&#x27;...&#x27;</span>] : [<span class="string">&#x27;...&#x27;</span>, cmwpFun()],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整配置"><a href="#完整配置" class="headerlink" title="完整配置"></a>完整配置</h3><p>至此, <code>plugins.js</code>完成, 完整的配置文件如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// plugins.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> devMode = process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cwp = <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;clean-webpack-plugin&#x27;</span>).CleanWebpackPlugin)();</span><br><span class="line"><span class="keyword">const</span> hwp = <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>))(&#123;</span><br><span class="line">    title: <span class="string">&#x27;MusicMaker&#x27;</span>,</span><br><span class="line">    favicon: path.resolve(__dirname, <span class="string">&#x27;../public/favicon.ico&#x27;</span>),</span><br><span class="line">    template: path.resolve(__dirname, <span class="string">&#x27;../public/index.html&#x27;</span>),</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> mcepFun = <span class="function">() =&gt;</span> <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;mini-css-extract-plugin&#x27;</span>))(&#123;&#125;);</span><br><span class="line"><span class="keyword">const</span> cmwpFun = <span class="function">() =&gt;</span> <span class="keyword">new</span> (<span class="built_in">require</span>(<span class="string">&#x27;css-minimizer-webpack-plugin&#x27;</span>))();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> plugins = devMode ? [cwp, hwp] : [cwp, hwp, mcepFun()];</span><br><span class="line"><span class="keyword">const</span> optimization = &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        chunks: <span class="string">&#x27;all&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    minimizer: devMode ? [<span class="string">&#x27;...&#x27;</span>] : [<span class="string">&#x27;...&#x27;</span>, cmwpFun()],</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123; plugins, optimization &#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Webpack配置-loaders-js"><a href="#Webpack配置-loaders-js" class="headerlink" title="Webpack配置 - loaders.js"></a>Webpack配置 - loaders.js</h2><p>接下来是很重要的Loader配置, 目前我想到的就是解析<code>.tsx</code>和<code>.scss</code>, 也就是解析TypeScript, React和Sass, 后续如果需要解析其他类型文件的话再进一步修改. 首先把本体们安装上:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D typescript</span><br><span class="line">npm i react react-dom</span><br><span class="line">npm i -D sass</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析-tsx"><a href="#解析-tsx" class="headerlink" title="解析.tsx"></a>解析<code>.tsx</code></h3><p>我会使用Babel对TypeScript, React和ES新特性进行解析, 安装命令如下:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript</span><br><span class="line">npm i core-js regenerator-runtime</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>@babel/core</code>是Babel的核心模块</li>
+<li><code>@babel/preset-react</code>是Babel用于编译React的preset</li>
+<li><code>@babel/preset-typescript</code>是Babel用于编译TypeScript的preset</li>
+<li><code>core-js</code>和<code>regenerator-runtime</code>是为了使用如Promise等新特性而需引入的polyfill</li>
+<li><code>babel-loader</code>是Webpack使用Babel的Loader</li>
+</ul>
+<p>现在编写<code>loader.js</code>配置文件, 内容如下:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// loader.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> include = [</span><br><span class="line">    path.resolve(__dirname, <span class="string">&#x27;../src&#x27;</span>),</span><br><span class="line">    path.resolve(__dirname, <span class="string">&#x27;../examples&#x27;</span>),</span><br><span class="line">];</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(t|j)sx?$/</span>,</span><br><span class="line">                loader: <span class="string">&#x27;babel-loader&#x27;</span>,</span><br><span class="line">                options: &#123; <span class="attr">cacheDirectory</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">                include,</span><br><span class="line">            &#125;,</span><br><span class="line">        ],</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在项目根目录创建Babel的配置文件<code>.babelrc</code>, 内容如下:</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">// .babelrc</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">        [</span><br><span class="line">            <span class="string">&quot;@babel/env&quot;</span>,</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="attr">&quot;targets&quot;</span>: <span class="string">&quot;defaults&quot;</span>, <span class="comment">// 以主流浏览器为构建目标</span></span><br><span class="line">                <span class="attr">&quot;useBuiltIns&quot;</span>: <span class="string">&quot;usage&quot;</span>, <span class="comment">// 按需引入polyfill</span></span><br><span class="line">                <span class="attr">&quot;corejs&quot;</span>: <span class="number">3</span>, <span class="comment">// core-js的版本</span></span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">&quot;@babel/preset-react&quot;</span>,</span><br><span class="line">        <span class="string">&quot;@babel/preset-typescript&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">Babel的`presets`是有顺序的, 按照从下到上的顺序解析.</span><br></pre></td></tr></table></figure>
+
+<h3 id="解析-scss"><a href="#解析-scss" class="headerlink" title="解析.scss"></a>解析<code>.scss</code></h3><p>解析Sass需要安装3个Loader:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D sass-loader css-loader style-loader</span><br></pre></td></tr></table></figure>
+<p>它们的作用分别如下:</p>
+<ul>
+<li><code>sass-loader</code>, 把Sass编译成CSS</li>
+<li><code>css-loader</code>, 把CSS转换成JavaScript</li>
+<li><code>style-loader</code>, 把JavaScript转换成&lt;style&gt;节点</li>
+</ul>
+<p>在生产环境把”CSS in JavaScript”转换成CSS文件需要<code>mini-css-extract-plugin</code>插件, 这个我们在代码分离部分说过.</p>
+<p>安装完Loader后, 再编写loaders.js文件, 新增解析Sass的部分:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// loader.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> devMode = process.env.NODE_ENV !== <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> mcepLoaderFun = <span class="function">() =&gt;</span> <span class="built_in">require</span>(<span class="string">&#x27;mini-css-extract-plugin&#x27;</span>).loader;</span><br><span class="line"><span class="keyword">const</span> include = [</span><br><span class="line">    path.resolve(__dirname, <span class="string">&#x27;../src&#x27;</span>),</span><br><span class="line">    path.resolve(__dirname, <span class="string">&#x27;../examples&#x27;</span>),</span><br><span class="line">];</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.(t|j)sx?$/</span>,</span><br><span class="line">                loader: <span class="string">&#x27;babel-loader&#x27;</span>,</span><br><span class="line">                options: &#123; <span class="attr">cacheDirectory</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">                include,</span><br><span class="line">            &#125;,</span><br><span class="line">            &#123;</span><br><span class="line">                test: <span class="regexp">/\.scss$/</span>,</span><br><span class="line">                use: [</span><br><span class="line">                    devMode ? <span class="string">&#x27;style-loader&#x27;</span> : mcepLoaderFun(),</span><br><span class="line">                    <span class="string">&#x27;css-loader&#x27;</span>,</span><br><span class="line">                    <span class="string">&#x27;sass-loader&#x27;</span>,</span><br><span class="line">                ],</span><br><span class="line">                include,</span><br><span class="line">            &#125;,</span><br><span class="line">        ],</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Webpack实际配置文件"><a href="#Webpack实际配置文件" class="headerlink" title="Webpack实际配置文件"></a>Webpack实际配置文件</h2><p>前面说的是基础的配置, 只不过是分到了3个文件里, 现在要把这3个文件整合起来. 项目有2个Webpack命令, 需要2个配置文件, 内容很好理解:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// config.doc.js</span></span><br><span class="line">process.env.NODE_ENV = <span class="string">&#x27;production&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    mode: <span class="string">&#x27;production&#x27;</span>,</span><br><span class="line">    ...require(<span class="string">&#x27;./entries&#x27;</span>),</span><br><span class="line">    ...require(<span class="string">&#x27;./plugins&#x27;</span>),</span><br><span class="line">    ...require(<span class="string">&#x27;./loaders&#x27;</span>),</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// config.doc.dev.js</span></span><br><span class="line">process.env.NODE_ENV = <span class="string">&#x27;development&#x27;</span>;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    mode: <span class="string">&#x27;development&#x27;</span>,</span><br><span class="line">    ...require(<span class="string">&#x27;./entries&#x27;</span>),</span><br><span class="line">    ...require(<span class="string">&#x27;./plugins&#x27;</span>),</span><br><span class="line">    ...require(<span class="string">&#x27;./loaders&#x27;</span>),</span><br><span class="line">    devtool: <span class="string">&#x27;eval-cheap-module-source-map&#x27;</span>,</span><br><span class="line">    devServer: &#123;</span><br><span class="line">        open: <span class="literal">true</span>,</span><br><span class="line">        contentBase: <span class="string">&#x27;../build/doc&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在<code>config.doc.dev.js</code>里, 要配置好用于实时开发的<code>devtool</code>和<code>devServer</code>.</p>
+<hr>
+<h2 id="TypeScript配置"><a href="#TypeScript配置" class="headerlink" title="TypeScript配置"></a>TypeScript配置</h2><p>使用Babel的TypeScript插件是不会顾及<code>tsconfig.json</code>的内容的, 我们这里有2个TypeScript配置文件, 内容基本一致. <code>tsconfig.json</code>文件内容如下:</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;target&quot;</span>: <span class="string">&quot;es2015&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;module&quot;</span>: <span class="string">&quot;es2015&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;jsx&quot;</span>: <span class="string">&quot;react&quot;</span>, <span class="comment">// 支持react</span></span><br><span class="line">    <span class="attr">&quot;declaration&quot;</span>: <span class="literal">true</span>, <span class="comment">// 生成.d.ts文件</span></span><br><span class="line">    <span class="attr">&quot;outDir&quot;</span>: <span class="string">&quot;./build/lib&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;rootDir&quot;</span>: <span class="string">&quot;./&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;strict&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;moduleResolution&quot;</span>: <span class="string">&quot;node&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;baseUrl&quot;</span>: <span class="string">&quot;./&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;paths&quot;</span>: &#123;<span class="attr">&quot;musicmaker&quot;</span>: [<span class="string">&quot;src&quot;</span>]&#125;, <span class="comment">// 配合baseUrl, 设置别名</span></span><br><span class="line">    <span class="attr">&quot;esModuleInterop&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;skipLibCheck&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">&quot;forceConsistentCasingInFileNames&quot;</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;include&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;src&quot;</span>, <span class="string">&quot;examples&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">我们的`src`和`examples`目录都使用了TypeScript, 为了让VSCode正确提示不报错, 所以`include`字段里包含了这连个目录. 但是, 使用`tsc`构建的时候, 只构建`src`目录, 所以需要另写一份配置文件, 更改的地方如下:</span><br><span class="line">```json</span><br><span class="line"><span class="comment">// tsconfig.lib.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;rootDir&quot;</span>: <span class="string">&quot;./src&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;include&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;src&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于VSCode插件"><a href="#关于VSCode插件" class="headerlink" title="关于VSCode插件"></a>关于VSCode插件</h2><p>我在项目里用到了下面的插件:</p>
+<h3 id="ESLint"><a href="#ESLint" class="headerlink" title="ESLint"></a>ESLint</h3><p>ESLint是用于JavaScript/TypeScript/JSX/TSX/CSS/Sass等的语法检测的, 可以有效防止一些错误, 需先通过npm安装:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D eslint</span><br></pre></td></tr></table></figure>
+<p>我把ESLint安装到了项目本地目录, 你也可以把它安到全局. 安装完成以后, 初始化ESLint. 在项目根目录执行以下命令:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npx eslint --init</span><br></pre></td></tr></table></figure>
+<p>根据项目选择合适的选项, 比如我的这个项目是要用到React和TypeScript的, 那相应的选项要选择true. 命令执行后会生成一个<code>.eslintrc.js</code>文件.</p>
+<p>之后我们可以安装VSCode的ESLint插件了, 插件会根据<code>.eslintrc.js</code>的配置对项目的文件语法进行检测, 对不符合规则的代码提出警告.</p>
+<h3 id="Prettier"><a href="#Prettier" class="headerlink" title="Prettier"></a>Prettier</h3><p>安装VSCode的Prettier插件, 可以使代码的风格更加规范, 增强可读性. Prettier并不会对代码的语法进行检测, 它只是去对代码进行无语义变更的格式化.</p>
+<p>安装Prettier的命令如下:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">npm i -D prettier</span><br></pre></td></tr></table></figure>
+
+<p>打开VSCode设置的<code>Format On Save</code>, 这样就可以每次保存的时候格式化代码了. 说实话写代码的时候不去关注格式, 之后一个CMD/Ctrl + s, 代码立刻变得漂亮, 这感觉是很棒的.</p>
+]]></content>
+      <categories>
+        <category>MusicMaker编写记录</category>
+      </categories>
+      <tags>
+        <tag>Webpack</tag>
       </tags>
   </entry>
 </search>
