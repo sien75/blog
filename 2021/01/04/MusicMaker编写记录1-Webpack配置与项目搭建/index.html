@@ -193,7 +193,7 @@
     </span>
     <span>
       <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2021-01-04
+      更新于:&nbsp;2021-01-28
     </span>
     <span>
       <span class="iconfont icon-folder"></span>
@@ -316,7 +316,7 @@
 <p>首先看<code>entries.js</code>, 我会把所有的<code>entry</code>和<code>output</code>以及<code>resolve</code>写在这里. 基本内容如下:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// entries.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: path.resolve(__dirname, <span class="string">&#x27;../examples/index.tsx&#x27;</span>),</span><br><span class="line">    output: &#123;</span><br><span class="line">        filename: <span class="string">&#x27;[name].js&#x27;</span>,</span><br><span class="line">        path: path.resolve(__dirname, <span class="string">&#x27;../build/doc&#x27;</span>),</span><br><span class="line">    &#125;,</span><br><span class="line">    resolve: &#123;</span><br><span class="line">        extensions: [<span class="string">&#x27;.tsx&#x27;</span>, <span class="string">&#x27;.ts&#x27;</span>, <span class="string">&#x27;.jsx&#x27;</span>, <span class="string">&#x27;.js&#x27;</span>],</span><br><span class="line">        alias: &#123;</span><br><span class="line">            musicmaker: path.resolve(__dirname, <span class="string">&#x27;../src&#x27;</span>),</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>当然Docs页是个多页面情况, 肯定不止一个entry, 以后会动态添加的. 设置别名<code>musicmaker</code>是为了在引入MusicMaker库的时候更方便, 更接近使用场景:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;musicmaker&#x27;</span>;</span><br><span class="line"><span class="comment">// 不设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../musicmaker&#x27;</span>;</span><br><span class="line">impoer MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../../../musicmaker&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;musicmaker&#x27;</span>;</span><br><span class="line"><span class="comment">// 不设置的话</span></span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../musicmaker&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> MusicMaker <span class="keyword">from</span> <span class="string">&#x27;../../../musicmaker&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="Webpack配置-plugins-js"><a href="#Webpack配置-plugins-js" class="headerlink" title="Webpack配置 - plugins.js"></a>Webpack配置 - plugins.js</h2><p>我会把所有<code>plugins</code>和<code>optimization</code>的配置放在这里.</p>
