@@ -407,14 +407,23 @@
    html元素的`clientWidth`和`clientHeight`分别表示**不包含滚动条的内部窗口**宽度和高度，这两个值受操作系统缩放比例和浏览器缩放比例的影响。  
    `window.devicePixelRatio`表示物理像素分辨率和CSS像素分辨率之比，即显示效果的放大倍数。
    ```javascript
-    //Windows操作系统的缩放比例是1.24，浏览器的缩放比例是1.25
-    //在浏览器最大化时
-    //显示器分辨率为1920*1080
+    // Windows操作系统的缩放比例是1.24，浏览器的缩放比例是1.25
+    // 在浏览器最大化时
+    // 显示器分辨率为1920*1080
     window.screenLeft;//0
     1920 / window.outerWidth;//约1.24
     window.outerWidth / window.innerWidth;//约1.25
     window.innerWidth - document.documentElement.clientWidth;//13，指上下滚动条的CSS像素宽度为13
     window.devicePixelRatio;//约1.55，即1.24*1.25
+   ```
+    在手机上, 当用户未进行系统缩放时, n倍屏中的n就是`window.devicePixelRatio`.
+   ```javascript
+    // iphone SE, 屏幕名义宽度375px, 屏幕实际宽度750px
+    window.devicePixelRatio; // 2
+    // iphone 13, 屏幕名义宽度390px, 屏幕实际宽度1170px
+    window.devicePixelRatio; // 3
+    // samsung s20, 屏幕名义宽度360px, 屏幕实际宽度1440px
+    window.deviecPixelRatio; // 4
    ```
 
 4. 打开新标签页：`window.open(url)`，本页面加载其他网址：`window.open(url, '_self')`，弹出窗口：`window.open(url, true)`。
