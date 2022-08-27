@@ -12,4 +12,4 @@
 
 <br />
 
-*powered by: [docsify](https://docsify.js.org/#/")*
+*powered by: [docsify](https://docsify.js.org/#/)*
