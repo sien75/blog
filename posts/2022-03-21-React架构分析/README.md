@@ -1,30 +1,3 @@
-<style type="text/css" rel="stylesheet">
-    body {
-        padding: 0 10vw;
-    }
-    p {
-        line-height: 2em;
-        letter-spacing: 2px;
-    }
-    img {
-        border: 1px solid grey;
-        margin: 10px 0;
-        max-width: 80vw;
-        max-height: 100vw;
-    }
-    pre {
-        background: #f2f2f2;
-        padding: 10px;
-    }
-    blockquote {
-        background: #f2f2f2;
-        padding: 2px 10px;
-        font-style: italic;
-        margin: 0;
-        border-radius: 10px;
-    }
-</style>
-
 <h1>React架构的进化</h1>
 
 我希望通过4个版本的React, 来阐述React的原理, 优化思路和设计理念.
