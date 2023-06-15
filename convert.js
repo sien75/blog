@@ -1,5 +1,5 @@
 /**
- * For given markdown file, this js script converts img and site path to github url.
+ * For given markdown file, this js script converts img path to github url, and deletes site path.
  * With this js script, markdown file can be mounted to other platforms.
  */
 
@@ -18,10 +18,16 @@ const readFile = () => {
     return fs.readFileSync(markdownPath).toString();
 };
 
-const replace = (str) => {
-    return str.replace(/(\[.*?\])\((.*?)\)/g, (match, p1, p2) => {
+const replaceImgPath = (str) => {
+    return str.replace(/\!(\[.*?\])\((.*?)\)/g, (match, p1, p2) => {
         const finalUrl = DEFAULT_URL_PREFIX + path.join(directory, p2);
-        return p1 + '(' + finalUrl + ')';
+        return '!' + p1 + '(' + finalUrl + ')';
+    });
+};
+
+const deleteSitePath = (str) => {
+    return str.replace(/[^\!]\[(.*?)\]\(.*?\)/g, (match, p1) => {
+        return p1;
     });
 };
 
@@ -30,5 +36,9 @@ const writeTempFile = (str) => {
 };
 
 const fileStr = readFile();
-const result = replace(fileStr);
+
+let result = fileStr;
+result = replaceImgPath(result);
+result = deleteSitePath(result);
+
 writeTempFile(result);
