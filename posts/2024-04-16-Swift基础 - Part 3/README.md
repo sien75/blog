@@ -1,4 +1,4 @@
-<h1>Swift基础 - Part 2</h1>
+<h1>Swift基础 - Part 3</h1>
 
 以自己已经掌握的TypeScript语言, 和部分掌握的C语言出发, 记录一些针对Swift语言的不同之处.
 
