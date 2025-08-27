@@ -1,12 +1,10 @@
 ### 流程图dsl
 
 mermaid
-d2
+plantuml
+d2 √
 
-### 低代码平台
+### 节点工作流(低代码)工具参考
 
-nodered
+https://www.kimi.com/chat/d26d1760ftlh0qb5hlrg
 
-### AI产品工具
-
-Coze和Dify的优秀功能设计

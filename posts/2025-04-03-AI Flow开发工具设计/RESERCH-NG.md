@@ -27,6 +27,7 @@ refine(专注B端应用)
 Fastify
 Platformatic
 Elysia
+fastapi
 
 容器
 Nginx
@@ -51,6 +52,7 @@ prisma(数据库交互工具)
 **状态管理**
 
 zustand
+jotai
 graphql(接口)
 
 **实时消息**
@@ -61,14 +63,21 @@ Ably (Pass)
 
 **打包工具**
 
-rspack(内置编译工具)
-vite(内置esbuild)
-esbuild
-parcel
+rspack(打包+swc编译+swc压缩)
+vite(dev:esbuild/prod:rollup打包+esbuild编译+esbuild压缩)
+parcel(打包+babel编译+swc压缩)
+esbuild(打包+编译+压缩)
 
 **编译工具**
 
 swc
+
+**部署**
+
+Vercel
+Netlify
+Cloudflare Pages
+AWS Amplify
 
 **项目管理工具**
 
