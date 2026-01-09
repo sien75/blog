@@ -1,5 +1,5 @@
 * [首页](/)
-* [AI Flow开发工具](categories/AI%20Flow开发工具.md)
+* [GraphiCode](categories/GraphiCode.md)
 * [技术漫谈](categories/技术漫谈.md)
 * [Web前端基础](categories/Web前端基础.md)
 * [Swift基础](categories/Swift基础.md)

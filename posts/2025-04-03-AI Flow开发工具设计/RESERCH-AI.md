@@ -11,19 +11,12 @@ https://openrouter.ai/
 https://302.ai/
 
 基础依赖的大模型
-闭源:
-* o
-* gpt
 * claude
+* gpt
+* qwen
 * gemini
 * grok
-* llama
-开源:
-* deepseek
-* qwen
-* kimi
 * glm
-* codellama
 
 ## 现成Vibe Coding工具
 

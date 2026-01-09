@@ -4,9 +4,9 @@
 
 *精品推荐*
 
-**[Code is Law: 智能合约安全事故案例分析](/posts/2025-11-13-智能合约安全事故案例分析/README.md)**
+**[GraphiCode的设计思路](/posts/2026-01-08-GraphiCode的设计思路/README.md)**
 
-**[AI Flow开发工具设计](/posts/2025-04-03-AI%20Flow开发工具设计/README.md)**
+**[Code is Law: 智能合约安全事故案例分析](/posts/2025-11-13-智能合约安全事故案例分析/README.md)**
 
 **[React架构分析](/posts/2022-03-21-React%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/)**
 
