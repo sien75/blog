@@ -40,3 +40,10 @@
 | Sticky fingers            | The Rolling Stones           | Blues rock        | 2026-03-16   | 8 -> 7          |
 | Slowhand                  | Eric Clapton                 | Country rock      | 2026-03-19   | 8 -> 9          |
 | To hell with the devil    | Stryper                      | White metal       | 2026-03-24   | 8               |
+|                           |                              |                   |              |                 |
+| Ride the lightning        | Metallica                    | Thrash metal      | 2026-04-03   | 7               |
+| Rust in peace             | Megadeth                     | Thrash metal      | 2026-04-07   | 8               |
+| All things must pass      | George Harrison              | Rock              | 2026-04-19   | 8               |
+| Highway to hell           | AC/DC                        | Hard rock         | 2026-04-22   | 8 -> 9          |
+| Bon Jovi                  | Bon Jovi                     | Glam metal        | 2026-04-28   | 8               |
+| Souls of black            | Testament                    | Thrash metal      | 2026-04-30   | 9               |
