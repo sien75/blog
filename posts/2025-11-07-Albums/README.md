@@ -39,7 +39,7 @@
 | The dark side of the moon | Pink Floyd                   | Progressive rock  | 2026-03-09   | 8 -> 9          |
 | Sticky fingers            | The Rolling Stones           | Blues rock        | 2026-03-16   | 8 -> 7          |
 | Slowhand                  | Eric Clapton                 | Country rock      | 2026-03-19   | 8 -> 9          |
-| To hell with the devil    | Stryper                      | White metal       | 2026-03-24   | 8               |
+| To hell with the devil    | Stryper                      | White metal       | 2026-03-24   | 8 -> 9          |
 |                           |                              |                   |              |                 |
 | Ride the lightning        | Metallica                    | Thrash metal      | 2026-04-03   | 7               |
 | Rust in peace             | Megadeth                     | Thrash metal      | 2026-04-07   | 8               |
@@ -47,3 +47,7 @@
 | Highway to hell           | AC/DC                        | Hard rock         | 2026-04-22   | 8 -> 9          |
 | Bon Jovi                  | Bon Jovi                     | Glam metal        | 2026-04-28   | 8               |
 | Souls of black            | Testament                    | Thrash metal      | 2026-04-30   | 9               |
+|                           |                              |                   |              |                 |
+| Dynasty                   | Kiss                         | Hard rock         | 2026-05-08   | 8               |
+| The Stranger              | Billy Joel                   | Rock              | 2025-05-12   | 8               |
+| Bleach                    | Nirvana                      | Grunge            | 2025-05-20   | 9               |
