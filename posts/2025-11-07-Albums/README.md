@@ -59,13 +59,24 @@
 | After the Golden Rush     | Neil Young               | Folk rock          | 2026-06-06   | 9               |
 | The Velvet Undgrd & Nico  | The Velvet Underground   | Art rock           | 2026-06-12   | 7               |
 | Random Access Memories    | Daft Punk                | Disco              | 2026-06-15   | 8 -> 9        # |
-| Gangster's Paradise       | Coolio                   | West Coast hip-hop | 2026-06-17   | 8               |
+| Gangster's Paradise       | Coolio                   | West Coast hip-hop | 2026-06-17   | 8 -> 9          |
 | The Joshua Tree           | U2                       | Rock               | 2026-06-24   | 7               |
 | Slippery When Wet         | Bon Jovi                 | Glam metal         | 2026-06-26   | 8               |
 |                           |                          |                    |              |                 |
-| Once Bitten               | Great White              | Glam metal         | 2026-07-02   | 9               |
+| Once Bitten               | Great White              | Glam metal         | 2026-07-02   | 9 -> 8          |
 | Skid Row                  | Skid Row                 | Glam metal         | 2026-07-07   | 7               |
 | The Freewheelin' B. Dylan | Bob Dylan                | Folk               | 2026-07-10   | 7               |
-| The Predator              | Ice Cube                 | West Coast hip-hop | 2026-07-13   | 8               |
-| ...Baby One More Time     | Britney Spears           | Pop                | 2026-07-21   | 8               |
-| Damaged                   | Black Flag               | Hardcore Punk      | 2026-07-22   | 8               |
+| The Predator              | Ice Cube                 | West Coast hip-hop | 2026-07-13   | 8 -> 9          |
+| ...Baby One More Time     | Britney Spears           | Pop                | 2026-07-21   | 8 -> 9          |
+| Damaged                   | Black Flag               | Hardcore punk      | 2026-07-22   | 8               |
+| GN'R Lies                 | Guns N' Roses            | Hard rock          | 2026-07-27   | 7               |
+| All Eyez on me (Disc 1)   | 2pac                     | West Coast hip-hop | 2026-07-29   | 8 -> 9          |
+|                           |                          |                    |              |                 |
+| Alice In Hell             | Annihilator              | Thrash metal       | 2026-08-04   | 8               |
+| Rumours                   | Fleetwood Mac            | Soft rock          | 2026-08-07   | 9               |
+| All Eyez on me (Disc 2)   | 2Pac                     | West Coast hip-hop | 2026-08-11   | 8               |
+| Eliminator                | ZZ Top                   | Hard rock          | 2026-08-17   | 9               |
+| Ok Computer               | Radiohead                | Alternative rock   | 2026-08-21   | 9             # |
+| Urban Hymns               | The Verve                | Britpop            | 2026-08-26   | 7               |
+|                           |                          |                    |              |                 |
+| First Two Seven Inches    | Minor Threat             | Hardcore punk      | 2026-09-01   | 8               |
