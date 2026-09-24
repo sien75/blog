@@ -4,7 +4,7 @@
 
 *精品推荐*
 
-**[Coding ❌ Engineering ✅](/posts/2026-09-24-Corazon%20Engineer/README.md)**
+**[Coding ❌ Engineering ✅：探索 Coding Agent 之上的 Engineering Agent](/posts/2026-09-24-Corazon%20Engineer/README.md)**
 
 ---
 
@@ -19,10 +19,6 @@
 **[MusicMaker](https://sien75.github.io/musicmaker/liveplay)**&nbsp;&nbsp;
 **[FlipGame](https://sien75.github.io/flipgame)**&nbsp;&nbsp;
 **[Calculator](https://sien75.github.io/calculator)**
-
----
-
-*往期精选*
 
 **[MusicMaker编写记录1-Webpack配置与项目搭建](/posts/2021-01-04-MusicMaker%E7%BC%96%E5%86%99%E8%AE%B0%E5%BD%951-Webpack%E9%85%8D%E7%BD%AE%E4%B8%8E%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA/)**
 

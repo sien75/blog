@@ -1,7 +1,8 @@
-# Coding Agent 之上，还缺什么？——探索 Engineering Agent
+# Coding ❌ Engineering ✅：探索 Coding Agent 之上的 Engineering Agent
 
 > 从 Coding Agent 到 Engineering Agent：一次系统级工程抽象的尝试  
-> Corazon Engineer 原型设计与实践
+> Corazon Engineer 原型设计与实践  
+> GitHub: [sien75/Corazon-Engineer](https://github.com/sien75/Corazon-Engineer)
 
 ## 1. AI 都会写代码了，工程问题解决了吗？
 
